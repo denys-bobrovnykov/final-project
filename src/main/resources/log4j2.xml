@@ -6,18 +6,29 @@
                 <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
             </PatternLayout>
         </Console>
-        <RollingFile name="RollingFile" fileName="logs/app.log" filePattern="logs/app-%d{MM-dd-yyyy}.log.gz"
-                     ignoreExceptions="false">
+        <RollingFile
+                name="rollingFile"
+                fileName="logs/application.log"
+                filePattern="logs/application.%i.log.gz"
+                ignoreExceptions="false">
+            <PatternLayout>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="5" />
+        </RollingFile>
+        <File name="MyFile" fileName="logs/app.log" append="false">
             <PatternLayout>
                 <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
             </PatternLayout>
-            <TimeBasedTriggeringPolicy />
-        </RollingFile>
+        </File>
     </Appenders>
     <Loggers>
-        <Root level="error">
-            <AppenderRef ref="STDOUT"/>
-            <AppenderRef ref="RollingFile" />
+        <Root level="debug">
+            <AppenderRef ref="STDOUT" />
+            <AppenderRef ref="rollingFile" />
         </Root>
     </Loggers>
 </Configuration>
