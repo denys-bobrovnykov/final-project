@@ -8,7 +8,7 @@
         </Console>
         <RollingFile
                 name="rollingFile"
-                fileName="logs/application.log"
+                fileName="/Users/Denys/!_EPAM/Final_Project/movie_theater/logs/application.log"
                 filePattern="logs/application.%i.log.gz"
                 ignoreExceptions="false">
             <PatternLayout>
@@ -19,7 +19,7 @@
             </Policies>
             <DefaultRolloverStrategy max="5" />
         </RollingFile>
-        <File name="MyFile" fileName="logs/app.log" append="false">
+        <File name="MyFile" fileName="/Users/Denys/!_EPAM/Final_Project/movie_theater/logs/app.log" append="false">
             <PatternLayout>
                 <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
             </PatternLayout>
