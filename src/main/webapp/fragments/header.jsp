@@ -16,7 +16,7 @@
     <div class="col">
     </div>
     <div class="container d-flex justify-content-center col-md schedule-link">
-        <a class="link-to-home" href="${ctxPath}/app/home"><fmt:message key="go.home"/></a>
+        <a class="${currentUri.contains('home') ? 'link-to-home marked' : 'link-to-home'}" href="${ctxPath}/app/home"><fmt:message key="go.home"/></a>
     </div>
     <div class="col d-flex justify-content-end align-items-center">
         <c:if test="${'ADMIN'.equalsIgnoreCase(sessionScope.get('user').getRole())}">
@@ -26,7 +26,7 @@
                 </div>
             </div>
         </c:if>
-        <div class="logout-button col-md d-flex justify-content-end">
+        <div class="logout-button col-md d-flex justify-content-end align-items-center">
             <c:if test="${sessionScope.get('user') != null}">
                 <form action="${ctxPath}/app/logout" method="post">
                     <button type="submit" class="btn btn-outline-secondary-light text-nowrap mx-2 logout-button">Sign out</button>
@@ -50,9 +50,7 @@
         <!--    LANGUAGE -->
         <div class="dropdown mx-2">
         <span class="dropdown-toggle language-control" type="button" id="dropdownMenuButton"
-              data-bs-toggle="dropdown" aria-expanded="false" >
-            Lang
-        </span>
+              data-bs-toggle="dropdown" aria-expanded="false" ><fmt:message key="lang.change"/></span>
             <ul class="dropdown-menu p-0" aria-labelledby="dropdownMenuButton">
                 <li class="mx-0"><a class="dropdown-item" href="${currentUri}?locale=en&id=${requestScope.get('selectedSession').getId()}">EN</a></li>
                 <li class="mx-0"><a class="dropdown-item" href="${currentUri}?locale=ua&id=${requestScope.get('selectedSession').getId()}">UA</a></li>

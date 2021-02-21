@@ -1,4 +1,6 @@
 package ua.project.movie.theater.database;
 
-public interface MovieDAO {
+import ua.project.movie.theater.database.model.Movie;
+
+public interface MovieDAO extends GenericCrudDAO<Movie> {
 }

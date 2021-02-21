@@ -1,12 +1,17 @@
 package ua.project.movie.theater.commands;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.project.movie.theater.database.model.User;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 public class CommandUtility {
+    private static final Logger logger = LogManager.getLogger(CommandUtility.class);
 
     public static boolean isLoggedIn(HttpServletRequest request, User user) {
         HashSet<User> loggedUsers = (HashSet<User>) request.getSession().getServletContext()
@@ -52,6 +57,17 @@ public class CommandUtility {
         HashMap<String, Object> copy = new HashMap<>();
         copy.putAll(original);
         return copy;
+    }
+
+    public static String getValidationProperty(String key) {
+        try (InputStream inputStream = CommandUtility.class.getClassLoader().getResourceAsStream("validation.properties")) {
+            Properties props = new Properties();
+            props.load(inputStream);
+            return props.getProperty(key);
+        } catch (IOException e) {
+            logger.error("Property file not found", e);
+        }
+        return "";
     }
 
 }

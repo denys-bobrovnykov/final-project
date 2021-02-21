@@ -34,15 +34,22 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 </c:if>
+<c:if test="${requestScope.get('flash').get('success').equals('removed')}">
+    <div class="alert alert-success alert-dismissible fade show" role="alert" >
+        <p><fmt:message key="remove.session"/></p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</c:if>
 
 <main class="container">
     <section class="container schedule-section row my-5">
         <form action="${ctxPath}/app/home" method="get">
             <div>
-                <input type="text" name="value" placeholder="<fmt:message key='title.placeholder'/>"/>
+                <input type="text" name="value"/>
                 <select name="search">
                     <option selected value="">----</option>
                     <option value="m.title_${currentLocale}"><fmt:message key="title.placeholder"/></option>
+                    <option value="m.release_year"><fmt:message key="release.year"/></option>
                 </select>
                 <button type="submit"><fmt:message key="search.button"></fmt:message></button>
                 <button type="submit"><fmt:message key="clear.filter.button"></fmt:message> </button>
@@ -83,7 +90,7 @@
                     <td><c:out value="${row.getSeatsAvailable()}"/></td>
                     <c:if test="${'ADMIN'.equalsIgnoreCase(sessionScope.get('user').getRole())}">
                         <td>
-                            <form action="${ctxPath}/app/admin/sessions/?id=${row.getId()}" method="post">
+                            <form action="${ctxPath}/app/admin/sessions/remove?id=${row.getId()}" method="post">
                                 <input type="submit" value="<fmt:message key="remove"/>">
                             </form>
                         </td>

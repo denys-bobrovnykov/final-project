@@ -3,9 +3,9 @@ package ua.project.movie.theater;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.project.movie.theater.commands.*;
-import ua.project.movie.theater.commands.admin.AdminCommand;
-import ua.project.movie.theater.commands.admin.AdminCommandSession;
+import ua.project.movie.theater.commands.admin.*;
 import ua.project.movie.theater.commands.buy.BuyTicketCommand;
+import ua.project.movie.theater.commands.cabinet.CabinetCommand;
 import ua.project.movie.theater.commands.details.SessionDetailsCommand;
 import ua.project.movie.theater.commands.index.IndexCommand;
 import ua.project.movie.theater.commands.login.LoginCommand;
@@ -26,8 +26,9 @@ import javax.servlet.http.HttpServletResponse;
 
 public class AppServlet extends HttpServlet {
     private static final Logger logger = LogManager.getRootLogger();
-    private Map<String, Command> commands = new HashMap<>();
+    private final Map<String, Command> commands = new HashMap<>();
 
+    @Override
     public void init(ServletConfig servletConfig){
         servletConfig.getServletContext()
                 .setAttribute("loggedUsers", new HashSet<User>());
@@ -38,19 +39,31 @@ public class AppServlet extends HttpServlet {
         commands.put("exception" , new ExceptionCommand());
         commands.put("admin", new AdminCommand());
         commands.put("admin/sessions", new AdminCommandSession());
+        commands.put("admin/movies", new AdminCommandMovie());
+        commands.put("admin/sessions/remove", new AdminCommandSessionRemove());
+        commands.put("admin/stats", new AdminCommandStats());
+        commands.put("cabinet", new CabinetCommand());
         commands.put("details", new SessionDetailsCommand());
         commands.put("buy", new BuyTicketCommand());
     }
 
+    @Override
     public void doGet(HttpServletRequest request,
-                      HttpServletResponse response)
-            throws IOException, ServletException {
-        processRequest(request, response);
+                      HttpServletResponse response) {
+        try {
+            processRequest(request, response);
+        } catch (ServletException | IOException e) {
+            logger.error(e);
+        }
     }
 
-    public void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
-        processRequest(request, response);
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            processRequest(request, response);
+        } catch (ServletException | IOException e) {
+            logger.error(e);
+        }
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response)

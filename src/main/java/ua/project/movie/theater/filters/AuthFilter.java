@@ -25,12 +25,12 @@ public class AuthFilter implements Filter {
         final HttpServletResponse res = (HttpServletResponse) response;
         final HttpSession session = req.getSession();
 
-        //Logged user.
         if (nonNull(session) &&
                 nonNull(session.getAttribute("user"))) {
             User.Role role = ((User) session.getAttribute("user")).getRole();
             if ("ADMIN".equalsIgnoreCase(String.valueOf(role))) {
-                req.getRequestDispatcher("/WEB-INF/admin.jsp").forward(req, res);
+                System.out.println(req.getRequestURI().substring(req.getContextPath().length()));
+                req.getRequestDispatcher(req.getRequestURI().substring(req.getContextPath().length())).forward(req, res);
             } else {
                 ((HttpServletResponse) response).sendRedirect(req.getContextPath() + "/app/home");
             }

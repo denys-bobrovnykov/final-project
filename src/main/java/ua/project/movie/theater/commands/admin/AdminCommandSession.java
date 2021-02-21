@@ -8,6 +8,7 @@ import ua.project.movie.theater.database.model.Movie;
 import ua.project.movie.theater.database.model.MovieSession;
 import ua.project.movie.theater.service.MovieSessionService;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
@@ -33,13 +34,14 @@ public class AdminCommandSession implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         if ("POST".equalsIgnoreCase(request.getMethod())) {
+            System.out.println("IN ADMIN COMMAND SESSION");
             String day = request.getParameter("day_of_session");
             String time = request.getParameter("time_start");
             String movieId = request.getParameter("movie_id");
             try {
                 List<String> errors = getValidationErrors(day, time, movieId);
                 getFlashAttributesContainer(request).put("errors", errors);
-                if (errors.size() > 0) {
+                if (!errors.isEmpty()) {
                     return request.getContextPath() + "redirect:/admin";
                 }
                 movieSessionService.save(MovieSession.builder()
@@ -50,9 +52,11 @@ public class AdminCommandSession implements Command {
                         .build())
                 .build());
                 getFlashAttributesContainer(request).put("success", "movieSession");
-                return request.getRequestURI() + "redirect:/app/admin";
+                return request.getContextPath() + "redirect:/admin";
             } catch (Exception e) {
                 logger.error(e);
+                getFlashAttributesContainer(request).put("failed", "movieSession");
+                return request.getContextPath() + "redirect:/admin";
             }
         }
         return request.getContextPath() + "redirect:/admin";

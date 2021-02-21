@@ -3,6 +3,7 @@ package ua.project.movie.theater.database.mysql;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.project.movie.theater.database.MovieSessionDAO;
+import ua.project.movie.theater.database.helpers.MySortOrder;
 import ua.project.movie.theater.database.helpers.Page;
 import ua.project.movie.theater.database.helpers.SqlQueryBuilder;
 import ua.project.movie.theater.database.model.MovieSession;
@@ -25,7 +26,10 @@ public class MySqlMovieSessionDAO implements MovieSessionDAO {
     private static final String FIND_ALL = MySqlProperties.getValue("find.all.sessions");
     private static final String COUNT_ALL = MySqlProperties.getValue("count.all.sessions");
     private static final String ORDER_BY = MySqlProperties.getValue("order.by");
-    private static final String LIMIT_p1_OFFSET_p2 = MySqlProperties.getValue("limit.offset");
+    private static final String LIMIT_P1_OFFSET_P2 = MySqlProperties.getValue("limit.offset");
+    private static final String INSERT_MOVIE_SESSION = MySqlProperties.getValue("save.session");
+    private static final String DELETE_MOVIE_SESSION = MySqlProperties.getValue("delete.session");
+
 
     public MySqlMovieSessionDAO(DataSource connectionPool) {
         this.connectionPool = connectionPool;
@@ -55,7 +59,7 @@ public class MySqlMovieSessionDAO implements MovieSessionDAO {
 
 
     @Override
-    public Page<MovieSession> findPageSorted(List order, Integer pageNum, Integer pageSize) {
+    public Page<MovieSession> findPageSorted(List<MySortOrder> order, Integer pageNum, Integer pageSize) {
         Page<MovieSession> movieSessionPage = new Page<>();
         int totalRowsCount;
         Connection connection = null;
@@ -72,7 +76,7 @@ public class MySqlMovieSessionDAO implements MovieSessionDAO {
             movieSessionPage.setPageCount(pageSize, totalRowsCount);
             stmt = connection
                     .prepareStatement(SqlQueryBuilder
-                            .buildQuery(FIND_ALL, ORDER_BY, buildOrdersString(order), LIMIT_p1_OFFSET_p2));
+                            .buildQuery(FIND_ALL, ORDER_BY, buildOrdersString(order), LIMIT_P1_OFFSET_P2));
             stmt.setInt(1, pageSize);
             stmt.setInt(2, pageNum * pageSize);
             resultSet = stmt.executeQuery();
@@ -89,7 +93,7 @@ public class MySqlMovieSessionDAO implements MovieSessionDAO {
         return movieSessionPage;
     }
 
-    public Page<MovieSession> findPageSorted(List order, Integer pageNum, Integer pageSize, String keyword, String value) {
+    public Page<MovieSession> findPageSorted(List<MySortOrder> order, Integer pageNum, Integer pageSize, String keyword, String value) {
         Page<MovieSession> movieSessionPage = new Page<>();
         Connection connection = null;
         PreparedStatement stmt = null;
@@ -107,7 +111,7 @@ public class MySqlMovieSessionDAO implements MovieSessionDAO {
             stmt = connection
                     .prepareStatement(SqlQueryBuilder
                             .buildQuery(FIND_ALL, "WHERE "+ keyword +" LIKE ?", ORDER_BY, buildOrdersString(order),
-                                    LIMIT_p1_OFFSET_p2));
+                                    LIMIT_P1_OFFSET_P2));
             stmt.setString(1, "%" + value + "%");
             stmt.setInt(2, pageSize);
             stmt.setInt(3, pageNum * pageSize);
@@ -134,6 +138,29 @@ public class MySqlMovieSessionDAO implements MovieSessionDAO {
     }
 
     @Override
+    public Optional<Integer> delete(MovieSession movieSession) {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        ResultSet resultSet = null;
+        try {
+            connection = connectionPool.getConnection();
+            stmt = connection.prepareStatement(DELETE_MOVIE_SESSION);
+            stmt.setInt(1, movieSession.getId());
+            int rowCount = stmt.executeUpdate();
+            if (rowCount == 0) {
+                logger.error("Nothing was removed");
+                return Optional.empty();
+            }
+            return Optional.of(rowCount);
+        } catch (SQLException e) {
+            logger.error(e);
+        } finally {
+            closeResourcesWithLogger(connection, stmt, resultSet, logger);
+        }
+        return Optional.empty();
+    }
+
+    @Override
     public Optional<MovieSession> findOne(MovieSession movieSession) {
         Connection connection = null;
         PreparedStatement stmt = null;
@@ -156,6 +183,29 @@ public class MySqlMovieSessionDAO implements MovieSessionDAO {
 
     @Override
     public Optional<MovieSession> save(MovieSession movieSession) {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        ResultSet resultSet = null;
+        try {
+            connection = connectionPool.getConnection();
+            stmt = connection.prepareStatement(INSERT_MOVIE_SESSION, Statement.RETURN_GENERATED_KEYS);
+            stmt.setDate(1, Date.valueOf(movieSession.getDayOfSession()));
+            stmt.setTime(2, Time.valueOf(movieSession.getTimeStart()));
+            stmt.setInt(3, movieSession.getMovie().getId());
+            int rowCount = stmt.executeUpdate();
+            if (rowCount == 0) {
+                logger.error("Nothing was saved");
+                return Optional.empty();
+            }
+            resultSet = stmt.getGeneratedKeys();
+            resultSet.next();
+            movieSession.setId(resultSet.getInt(1));
+            return Optional.of(movieSession);
+        } catch (SQLException e) {
+            logger.error(e);
+        } finally {
+            closeResourcesWithLogger(connection, stmt, resultSet, logger);
+        }
         return Optional.empty();
     }
 
@@ -164,7 +214,7 @@ public class MySqlMovieSessionDAO implements MovieSessionDAO {
         return null;
     }
 
-    private String buildOrdersString(List mySortOrders) {
+    private String buildOrdersString(List<MySortOrder> mySortOrders) {
         StringBuilder builder = new StringBuilder();
         mySortOrders.forEach(el -> builder.append(",").append(el));
         return builder.substring(1);

@@ -10,6 +10,7 @@ import ua.project.movie.theater.database.properties.MySqlProperties;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +25,8 @@ public class MySqlTicketDAO implements TicketDAO {
     private static final String INSERT_INTO_SESSION_TICKETS = MySqlProperties.getValue("insert.in.session.seat");
     private static final String GET_USER_TICKETS = MySqlProperties.getValue("get.user.tickets");
     private static final String FOR_SESSION = MySqlProperties.getValue("for.buy.page");
+    private static final String COUNT_SEATS_BOUGHT = MySqlProperties.getValue("count.seats.bought");
+    private static final String GET_ALL_USER_TICKETS = MySqlProperties.getValue("get.tickets.for.user");
 
 
     public MySqlTicketDAO(DataSource connectionPool) {
@@ -99,6 +102,51 @@ public class MySqlTicketDAO implements TicketDAO {
 
         }
         return Optional.empty();
+    }
+
+    @Override
+    public Long countAllSeatsBought(LocalDate dateStart, LocalDate dateEnd) {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        ResultSet resultSet = null;
+        try {
+            connection = connectionPool.getConnection();
+            stmt = connection.prepareStatement(COUNT_SEATS_BOUGHT);
+            stmt.setDate(1, Date.valueOf(dateStart));
+            stmt.setDate(2, Date.valueOf(dateEnd));
+            resultSet = stmt.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getLong("bought_count");
+            }
+        } catch (SQLException ex) {
+            logger.error(ex);
+        } finally {
+            closeResourcesWithLogger(connection, stmt, resultSet, logger);
+        }
+        return 0L;
+    }
+
+    @Override
+    public Optional<List<Ticket>> getUserTickets(User user) {
+        List<Ticket> tickets = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        ResultSet resultSet = null;
+        try {
+            connection = connectionPool.getConnection();
+            stmt = connection.prepareStatement(GET_ALL_USER_TICKETS);
+            stmt.setInt(1, user.getId());
+            resultSet = stmt.executeQuery();
+            while (resultSet.next()) {
+                tickets.add(mapTicket(resultSet));
+            }
+            return Optional.of(tickets);
+        } catch (SQLException ex) {
+            logger.error(ex);
+            return Optional.empty();
+        } finally {
+            closeResourcesWithLogger(connection, stmt, resultSet, logger);
+        }
     }
 
     private Ticket mapTicket(ResultSet resultSet) throws SQLException {

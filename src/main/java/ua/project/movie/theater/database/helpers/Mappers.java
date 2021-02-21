@@ -17,14 +17,7 @@ public class Mappers {
                 .id(resultSet.getInt("ms.id"))
                 .dayOfSession(LocalDate.parse(resultSet.getString("ms.day_of_session")))
                 .timeStart(LocalTime.parse(resultSet.getString("ms.time_start")))
-                .movie(Movie.builder()
-                        .id(resultSet.getInt("m.id"))
-                        .titleEn(resultSet.getString("m.title_en"))
-                        .titleUa(resultSet.getString("m.title_ua"))
-                        .releaseYear(resultSet.getInt("m.release_year"))
-                        .runningTime(resultSet.getInt("m.running_time"))
-                        .poster(resultSet.getString("m.poster"))
-                        .build())
+                .movie(mapMovie(resultSet))
                 .seatsAvailable(resultSet.getInt("seats_avail"))
                 .build();
     }
@@ -41,6 +34,17 @@ public class Mappers {
                 .email(resultSet.getString("email"))
                 .password(resultSet.getString("password"))
                 .role(User.Role.valueOf(resultSet.getString("role")))
+                .build();
+    }
+
+    public static Movie mapMovie(ResultSet resultSet) throws SQLException {
+        return Movie.builder()
+                .id(resultSet.getInt("m.id"))
+                .titleEn(resultSet.getString("m.title_en"))
+                .titleUa(resultSet.getString("m.title_ua"))
+                .releaseYear(resultSet.getInt("m.release_year"))
+                .runningTime(resultSet.getInt("m.running_time"))
+                .poster(resultSet.getString("m.poster"))
                 .build();
     }
 

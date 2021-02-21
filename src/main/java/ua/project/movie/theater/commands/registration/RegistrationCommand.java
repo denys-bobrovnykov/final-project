@@ -9,30 +9,17 @@ import ua.project.movie.theater.service.LoginService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import static ua.project.movie.theater.commands.CommandUtility.getFlashAttributesContainer;
+import static ua.project.movie.theater.commands.CommandUtility.getValidationProperty;
 
 public class RegistrationCommand implements Command {
     private final Logger logger = LogManager.getLogger(RegistrationCommand.class);
     private final LoginService loginService = new LoginService();
-    private static String PASSWORD_REGEX;
-    private static String EMAIL_REGEX;
-
-     {
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("validation.properties")) {
-            Properties props = new Properties();
-            props.load(inputStream);
-            PASSWORD_REGEX = props.getProperty("password");
-            EMAIL_REGEX = props.getProperty("email");
-        } catch (IOException e) {
-            logger.error("Property file not found", e);
-        }
-    }
+    private static final String PASSWORD_REGEX = getValidationProperty("password");
+    private static final String EMAIL_REGEX = getValidationProperty("email");
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
