@@ -1,10 +1,24 @@
 package ua.project.movie.theater.database.model;
 
+/**
+ * User model
+ */
 public class User {
     private Integer id;
     private String email;
     private String password;
     private Role role;
+
+    private User(Builder builder) {
+        this.id = builder.id;
+        this.email = builder.email;
+        this.password = builder.password;
+        this.role = builder.role;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
 
     public int getId() {
         return id;
@@ -38,45 +52,6 @@ public class User {
         this.role = role;
     }
 
-    private User(Builder builder) {
-        this.id = builder.id;
-        this.email = builder.email;
-        this.password = builder.password;
-        this.role = builder.role;
-    }
-
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    public static class Builder {
-        Integer id;
-        String email;
-        String password;
-        Role role;
-
-        public Builder id(Integer id) {
-            this.id = id;
-            return this;
-        }
-
-        public Builder email(String email) {
-            this.email = email;
-            return this;
-        }
-        public Builder password(String password) {
-            this.password = password;
-            return this;
-        }
-        public Builder role(Role role) {
-            this.role = role;
-            return this;
-        }
-        public User build() {
-            return new User(this);
-        }
-    }
-
     @Override
     public String toString() {
         return "User{" +
@@ -106,6 +81,37 @@ public class User {
     }
 
     public enum Role {
-        USER, ADMIN;
+        USER, ADMIN
+    }
+
+    public static class Builder {
+        Integer id;
+        String email;
+        String password;
+        Role role;
+
+        public Builder id(Integer id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder password(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public Builder role(Role role) {
+            this.role = role;
+            return this;
+        }
+
+        public User build() {
+            return new User(this);
+        }
     }
 }

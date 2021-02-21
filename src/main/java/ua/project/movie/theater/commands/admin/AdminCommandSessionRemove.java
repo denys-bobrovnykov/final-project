@@ -24,7 +24,7 @@ public class AdminCommandSessionRemove implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         String movieSessionId = request.getParameter("id");
-        Integer realId;
+        int realId;
         try {
             realId = Integer.parseInt(movieSessionId);
         } catch (NumberFormatException ex) {

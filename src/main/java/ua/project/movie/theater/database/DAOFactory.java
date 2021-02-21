@@ -2,8 +2,10 @@ package ua.project.movie.theater.database;
 
 import ua.project.movie.theater.database.mysql.MySqlDAOFactory;
 
+/**
+ * Abstract DAO factory
+ */
 public abstract class DAOFactory {
-    public static final String POSTGRES = "Postgres";
     public static final String MYSQL = "MySQL";
 
     public static DAOFactory getDAOFactory() {
@@ -11,6 +13,7 @@ public abstract class DAOFactory {
     }
 
     public abstract UserDAO getUserDAO();
+
     public abstract MovieSessionDAO getMovieSessionDAO();
 
     public abstract MovieDAO getMovieDao();

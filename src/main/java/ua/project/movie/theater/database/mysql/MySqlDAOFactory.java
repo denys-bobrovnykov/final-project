@@ -5,19 +5,18 @@ import ua.project.movie.theater.database.connection.ConnectionPool;
 
 import javax.sql.DataSource;
 
+/**
+ * DAO factory implementation
+ */
 public class MySqlDAOFactory extends DAOFactory {
-    private static MySqlDAOFactory instance;
-    private DataSource ds = ConnectionPool.getConnectionPool();
+    private final DataSource ds = ConnectionPool.getConnectionPool();
 
     private MySqlDAOFactory() {
         super();
     }
 
-    public synchronized static MySqlDAOFactory getInstance() {
-        if (instance == null) {
-            instance = new MySqlDAOFactory();
-        }
-        return instance;
+    public static MySqlDAOFactory getInstance() {
+        return new MySqlDAOFactory();
     }
 
     @Override

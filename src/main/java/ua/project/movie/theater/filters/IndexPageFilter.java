@@ -1,8 +1,5 @@
 package ua.project.movie.theater.filters;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,9 +9,11 @@ import java.io.IOException;
  * Filter redirects any requests to home page
  */
 public class IndexPageFilter implements Filter {
-    private final Logger logger = LogManager.getLogger(IndexPageFilter.class);
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+        /*
+        Must be defined for implementation
+         */
     }
 
     @Override
@@ -29,8 +28,11 @@ public class IndexPageFilter implements Filter {
             filterChain.doFilter(servletRequest, servletResponse);
         }
     }
+
     @Override
     public void destroy() {
-
+        /*
+        Must be defined for implementation
+         */
     }
 }

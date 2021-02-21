@@ -7,6 +7,9 @@ import javax.servlet.http.HttpSessionListener;
 import java.util.HashMap;
 import java.util.HashSet;
 
+/**
+ * Listens on logged users to prevent simultaneous logging of the same user.
+ */
 public class SessionListener implements HttpSessionListener {
 
     @Override

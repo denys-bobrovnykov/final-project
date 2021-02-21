@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -46,8 +44,8 @@ public class AdminCommandStats implements Command {
             getFlashAttributesContainer(request).put("period", datesTuple);
             return request.getContextPath() + "redirect:/admin";
         } catch (AppException ex) {
-           logger.error(ex);
-           return request.getContextPath() + "redirect:/admin";
+            logger.error(ex);
+            return request.getContextPath() + "redirect:/admin";
         }
     }
 

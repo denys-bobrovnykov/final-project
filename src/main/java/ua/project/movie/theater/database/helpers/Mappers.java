@@ -10,7 +10,13 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/**
+ * Mappers for models.
+ * They use predefined fields from resultset
+ */
 public class Mappers {
+
+    private Mappers() {}
 
     public static MovieSession mapMovieSession(ResultSet resultSet) throws SQLException {
         return MovieSession.builder()

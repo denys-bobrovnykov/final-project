@@ -2,6 +2,9 @@ package ua.project.movie.theater.database.helpers;
 
 import java.util.Arrays;
 
+/**
+ * Util class concatenates SQL queries
+ */
 public class SqlQueryBuilder {
 
     public static String buildQuery(String... parts) {

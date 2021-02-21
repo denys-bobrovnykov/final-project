@@ -13,6 +13,7 @@ import java.util.*;
 public class CommandUtility {
     private static final Logger logger = LogManager.getLogger(CommandUtility.class);
 
+    private CommandUtility(){}
     public static boolean isLoggedIn(HttpServletRequest request, User user) {
         HashSet<User> loggedUsers = (HashSet<User>) request.getSession().getServletContext()
                 .getAttribute("loggedUsers");
@@ -37,9 +38,9 @@ public class CommandUtility {
 
     public static  int getPageNumber(HttpServletRequest request) {
         return request.getParameter("page") == null
-                || Integer.valueOf(request.getParameter("page")) < 0
+                || Integer.parseInt(request.getParameter("page")) < 0
                 ? 0
-                : Integer.valueOf(request.getParameter("page"));
+                : Integer.parseInt(request.getParameter("page"));
     }
 
     public static  String getSortParamsForPage(String[] sortParam) {
@@ -48,15 +49,13 @@ public class CommandUtility {
         return builder.toString().length() > 0 ?  builder.substring("&sort=".length()) : builder.toString();
     }
 
-    public static HashMap<String, Object> getFlashAttributesContainer(HttpServletRequest request) {
+    public static Map<String, Object> getFlashAttributesContainer(HttpServletRequest request) {
         return (HashMap<String, Object>) request.getSession().getAttribute("flash");
     }
 
-    public static HashMap<String, Object> copyFlash(HttpServletRequest request) {
+    public static Map<String, Object> copyFlash(HttpServletRequest request) {
         HashMap<String, Object> original = (HashMap<String, Object>) request.getSession().getAttribute("flash");
-        HashMap<String, Object> copy = new HashMap<>();
-        copy.putAll(original);
-        return copy;
+        return new HashMap<>(original);
     }
 
     public static String getValidationProperty(String key) {

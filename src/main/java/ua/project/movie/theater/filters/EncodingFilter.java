@@ -3,6 +3,9 @@ package ua.project.movie.theater.filters;
 import javax.servlet.*;
 import java.io.IOException;
 
+/**
+ * UTF-8 filter
+ */
 public class EncodingFilter implements Filter {
 
     @Override

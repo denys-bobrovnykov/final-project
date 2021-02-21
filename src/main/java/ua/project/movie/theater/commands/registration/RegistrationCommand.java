@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ua.project.movie.theater.commands.Command;
+import ua.project.movie.theater.database.DAOFactory;
 import ua.project.movie.theater.database.model.User;
 import ua.project.movie.theater.service.LoginService;
 
@@ -16,14 +17,14 @@ import static ua.project.movie.theater.commands.CommandUtility.getFlashAttribute
 import static ua.project.movie.theater.commands.CommandUtility.getValidationProperty;
 
 public class RegistrationCommand implements Command {
-    private final Logger logger = LogManager.getLogger(RegistrationCommand.class);
-    private final LoginService loginService = new LoginService();
     private static final String PASSWORD_REGEX = getValidationProperty("password");
     private static final String EMAIL_REGEX = getValidationProperty("email");
+    private final Logger logger = LogManager.getLogger(RegistrationCommand.class);
+    private final LoginService loginService = new LoginService(DAOFactory.getDAOFactory().getUserDAO());
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-         logger.info(PASSWORD_REGEX);
+        logger.info(PASSWORD_REGEX);
         if ("POST".equalsIgnoreCase(request.getMethod())) {
             List<String> errors = new ArrayList<>();
             String email = request.getParameter("email");

@@ -1,17 +1,15 @@
 package ua.project.movie.theater.service;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import ua.project.movie.theater.database.SeatDAO;
 import ua.project.movie.theater.database.model.Seat;
-import ua.project.movie.theater.database.model.User;
-import ua.project.movie.theater.exception.AppException;
 
 import java.util.List;
 
+/**
+ * Seat service
+ */
 public class SeatService {
-    private final Logger logger = LogManager.getLogger(SeatService.class);
-    private SeatDAO seatDAO;
+    private final SeatDAO seatDAO;
 
     public SeatService(SeatDAO seatDAO) {
         this.seatDAO = seatDAO;

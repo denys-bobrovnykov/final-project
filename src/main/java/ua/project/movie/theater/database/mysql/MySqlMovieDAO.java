@@ -15,11 +15,14 @@ import java.util.Optional;
 import static ua.project.movie.theater.database.connection.ConnectionPool.closeResourcesWithLogger;
 import static ua.project.movie.theater.database.helpers.Mappers.mapMovie;
 
+/**
+ * MovieDAO implementation
+ */
 public class MySqlMovieDAO implements MovieDAO {
-    private final Logger logger = LogManager.getLogger(MySqlMovieDAO.class);
-    private final DataSource connectionPool;
     private static final String FIND_ALL = MySqlProperties.getValue("find.all.movies");
     private static final String CREATE_MOVIE = MySqlProperties.getValue("create.movie");
+    private final Logger logger = LogManager.getLogger(MySqlMovieDAO.class);
+    private final DataSource connectionPool;
 
 
     public MySqlMovieDAO(DataSource connectionPool) {
@@ -69,7 +72,7 @@ public class MySqlMovieDAO implements MovieDAO {
             if (rowCount == 0) {
                 return Optional.empty();
             }
-            resultSet =stmt.getGeneratedKeys();
+            resultSet = stmt.getGeneratedKeys();
             resultSet.next();
             movie.setId(resultSet.getInt(1));
             return Optional.of(movie);
@@ -79,9 +82,5 @@ public class MySqlMovieDAO implements MovieDAO {
             closeResourcesWithLogger(connection, stmt, resultSet, logger);
         }
         return Optional.empty();
-    }
-    @Override
-    public Integer update(Movie movie) {
-        return null;
     }
 }

@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * Util class.
+ * Gets properties for SQL queries from db.properties file
+ */
 public class MySqlProperties {
     private static final String FILE_NAME = "db.properties";
 
@@ -13,7 +17,8 @@ public class MySqlProperties {
         try (InputStream inputStream = ConnectionPool.class.getClassLoader().getResourceAsStream(FILE_NAME)) {
             Properties props = new Properties();
             props.load(inputStream);
-            return key != null ? props.getProperty(key) : "";
+            return key != null
+                    ? props.getProperty(key) : null;
         } catch (IOException e) {
             e.printStackTrace();
         }

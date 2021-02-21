@@ -13,6 +13,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Connection pool creation class.
+ */
 public class ConnectionPool {
     private static final Logger logger = LogManager.getLogger(ConnectionPool.class);
     private static DataSource ds;
@@ -34,28 +37,35 @@ public class ConnectionPool {
         return ds;
     }
 
-public static void closeResourcesWithLogger(Connection connection, PreparedStatement stmt, ResultSet resultSet, Logger logger) {
-    if (resultSet != null) {
-        try {
-            resultSet.close();
-        } catch (SQLException ex) {
-            logger.error(ex.getMessage());
+    /**
+     * Util for closing all resources
+     * @param connection connection
+     * @param stmt prepared statement
+     * @param resultSet resultset
+     * @param logger logger of client
+     */
+    public static void closeResourcesWithLogger(Connection connection, PreparedStatement stmt, ResultSet resultSet, Logger logger) {
+        if (resultSet != null) {
+            try {
+                resultSet.close();
+            } catch (SQLException ex) {
+                logger.error(ex.getMessage());
+            }
+        }
+        if (stmt != null) {
+            try {
+                stmt.close();
+            } catch (SQLException ex) {
+                logger.error(ex.getMessage());
+            }
+        }
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                logger.error(ex.getMessage());
+            }
         }
     }
-    if (stmt != null) {
-        try {
-            stmt.close();
-        } catch (SQLException ex) {
-            logger.error(ex.getMessage());
-        }
-    }
-    if (connection != null) {
-        try {
-            connection.close();
-        } catch (SQLException ex) {
-            logger.error(ex.getMessage());
-        }
-    }
-}
 
 }

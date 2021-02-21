@@ -2,7 +2,6 @@ package ua.project.movie.theater.database.mysql;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import ua.project.movie.theater.database.GenericCrudDAO;
 import ua.project.movie.theater.database.UserDAO;
 import ua.project.movie.theater.database.model.User;
@@ -10,18 +9,21 @@ import ua.project.movie.theater.database.properties.MySqlProperties;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static ua.project.movie.theater.database.connection.ConnectionPool.closeResourcesWithLogger;
 import static ua.project.movie.theater.database.helpers.Mappers.mapUser;
 
-
+/**
+ * UserDAO implementation
+ */
 public class MySqlUserDAO implements GenericCrudDAO<User>, UserDAO {
-    private final Logger logger = LogManager.getLogger(MySqlUserDAO.class);
-    private final DataSource connectionPool;
     private static final String FIND_USER_BY_EMAIL = MySqlProperties.getValue("find.user.by.email");
     private static final String SAVE_USER = MySqlProperties.getValue("save.user");
+    private final Logger logger = LogManager.getLogger(MySqlUserDAO.class);
+    private final DataSource connectionPool;
 
     public MySqlUserDAO(DataSource connectionPool) {
         this.connectionPool = connectionPool;
@@ -52,7 +54,7 @@ public class MySqlUserDAO implements GenericCrudDAO<User>, UserDAO {
 
     @Override
     public List<User> findAll() {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -82,18 +84,14 @@ public class MySqlUserDAO implements GenericCrudDAO<User>, UserDAO {
             if (connection != null) {
                 try {
                     connection.rollback();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
+                } catch (SQLException e) {
+                   logger.error(e);
                 }
             }
         } finally {
-            closeResourcesWithLogger(connection, stmt, resultSet, logger);        }
+            closeResourcesWithLogger(connection, stmt, resultSet, logger);
+        }
         return Optional.empty();
-    }
-
-    @Override
-    public Integer update(User user) {
-        throw new NotImplementedException();
     }
 
 }

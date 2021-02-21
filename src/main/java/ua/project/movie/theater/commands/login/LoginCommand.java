@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ua.project.movie.theater.commands.Command;
 import ua.project.movie.theater.commands.CommandUtility;
+import ua.project.movie.theater.database.DAOFactory;
 import ua.project.movie.theater.exception.AppException;
 import ua.project.movie.theater.service.LoginService;
 import ua.project.movie.theater.database.model.User;
@@ -16,7 +17,7 @@ import static ua.project.movie.theater.commands.CommandUtility.getFlashAttribute
 
 public class LoginCommand implements Command {
     private final Logger logger = LogManager.getRootLogger();
-    private final LoginService loginService = new LoginService();
+    private final LoginService loginService = new LoginService(DAOFactory.getDAOFactory().getUserDAO());
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {

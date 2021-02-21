@@ -8,7 +8,6 @@ import ua.project.movie.theater.database.model.Movie;
 import ua.project.movie.theater.database.model.MovieSession;
 import ua.project.movie.theater.service.MovieSessionService;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
@@ -25,7 +24,7 @@ import static ua.project.movie.theater.commands.CommandUtility.getFlashAttribute
  */
 public class AdminCommandSession implements Command {
     private final Logger logger = LogManager.getLogger(AdminCommandSession.class);
-    private MovieSessionService movieSessionService;
+    private final MovieSessionService movieSessionService;
 
     public AdminCommandSession() {
         movieSessionService = new MovieSessionService(DAOFactory.getDAOFactory().getMovieSessionDAO());
@@ -34,7 +33,6 @@ public class AdminCommandSession implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         if ("POST".equalsIgnoreCase(request.getMethod())) {
-            System.out.println("IN ADMIN COMMAND SESSION");
             String day = request.getParameter("day_of_session");
             String time = request.getParameter("time_start");
             String movieId = request.getParameter("movie_id");

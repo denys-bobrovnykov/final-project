@@ -6,13 +6,20 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Movie session model.
+ */
 public class MovieSession {
     private Integer id;
     private LocalDate dayOfSession;
     private LocalTime timeStart;
     private Movie movie;
     private List<Seat> seats;
-    private Integer seatsAvailable;
+    private final Integer seatsAvailable;
+
+    public Integer getSeatsAvailable() {
+        return seatsAvailable;
+    }
 
     public List<Seat> getSeats() {
         return seats;
@@ -52,14 +59,6 @@ public class MovieSession {
 
     public void setTimeStart(LocalTime timeStart) {
         this.timeStart = timeStart;
-    }
-
-    public Integer getSeatsAvailable() {
-        return seatsAvailable;
-    }
-
-    public void setSeatsAvailable(Integer seatsAvailable) {
-        this.seatsAvailable = seatsAvailable;
     }
 
     public static Builder builder() {
@@ -108,7 +107,7 @@ public class MovieSession {
             this.movie = movie;
             return this;
         }
-        public Builder seats(List<Seat> movie) {
+        public Builder seats(List<Seat> seats) {
             this.seats = seats;
             return this;
         }

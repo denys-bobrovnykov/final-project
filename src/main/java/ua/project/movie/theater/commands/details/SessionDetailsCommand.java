@@ -12,7 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class SessionDetailsCommand implements Command {
     private final Logger logger = LogManager.getLogger(SessionDetailsCommand.class);
-    private MovieSessionService movieSessionService = new MovieSessionService(DAOFactory.getDAOFactory().getMovieSessionDAO());
+    private final MovieSessionService movieSessionService = new MovieSessionService(DAOFactory.getDAOFactory().getMovieSessionDAO());
+
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         Integer id = request.getParameter("id") != null ? Integer.valueOf(request.getParameter("id")) : 0;

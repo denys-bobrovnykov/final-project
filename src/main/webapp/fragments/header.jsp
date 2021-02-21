@@ -28,8 +28,8 @@
         </c:if>
         <div class="logout-button col-md d-flex justify-content-end align-items-center">
             <c:if test="${sessionScope.get('user') != null}">
-                <form action="${ctxPath}/app/logout" method="post">
-                    <button type="submit" class="btn btn-outline-secondary-light text-nowrap mx-2 logout-button">Sign out</button>
+                <form action="${ctxPath}/app/logout" method="post" class="d-flex align-items-center my-0">
+                    <button type="submit" class="btn btn-outline-secondary-light text-nowrap mx-2 logout-button"><fmt:message key="sign.out" /></button>
                 </form>
             </c:if>
         </div>

@@ -9,9 +9,15 @@ import java.io.IOException;
 
 import static java.util.Objects.nonNull;
 
+/**
+ * Filter blocks registration and login routes for already logged in user.
+ */
 public class LoggedUserFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+         /*
+        Must be defined for implementation
+         */
     }
 
     @Override
@@ -22,8 +28,6 @@ public class LoggedUserFilter implements Filter {
         final HttpServletRequest req = (HttpServletRequest) request;
         final HttpServletResponse res = (HttpServletResponse) response;
         final HttpSession session = req.getSession();
-
-        //Logged user.
         if (nonNull(session) &&
                 nonNull(session.getAttribute("user"))) {
             if (req.getRequestURI()
@@ -42,6 +46,8 @@ public class LoggedUserFilter implements Filter {
 
     @Override
     public void destroy() {
-
+         /*
+        Must be defined for implementation
+         */
     }
 }

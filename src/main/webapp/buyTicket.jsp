@@ -5,10 +5,6 @@
 <%@ taglib prefix="fmy" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page isELIgnored="false" %>
 
-<%--<c:set var="currentLocale" value="${not empty param.locale ? param.locale : not empty currentLocale ? currentLocale : sessionScope.currentLocale}" scope="session" />--%>
-<%--<fmt:setLocale value="${currentLocale}"/>&lt;%&ndash;&ndash;%&gt;--%>
-<%--<fmt:setBundle basename="messages"/>--%>
-
 <c:set value="${requestScope.get('selectedSession')}" var="selectedSession" scope="page"/>
 
 <html lang="en">

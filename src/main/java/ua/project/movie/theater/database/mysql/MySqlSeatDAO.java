@@ -15,11 +15,14 @@ import java.util.Optional;
 import static ua.project.movie.theater.database.connection.ConnectionPool.closeResourcesWithLogger;
 import static ua.project.movie.theater.database.helpers.Mappers.mapSeat;
 
+/**
+ * SeatDAO implementation
+ */
 public class MySqlSeatDAO implements SeatDAO {
+    private static final String FIND_ALL_SEATS = MySqlProperties.getValue("find.all.seats");
+    private static final String FIND_BY_SESSION_ID = MySqlProperties.getValue("find.seats.session");
     private final Logger logger = LogManager.getLogger(MySqlSeatDAO.class);
     private final DataSource connectionPool;
-    private static final String FIND_ALL_SEATS = MySqlProperties.getValue("find.all.seats");
-    private static final String FIND_BY_SESSION_ID =MySqlProperties.getValue("find.seats.session");
 
     public MySqlSeatDAO(DataSource connectionPool) {
         this.connectionPool = connectionPool;
@@ -55,11 +58,6 @@ public class MySqlSeatDAO implements SeatDAO {
     @Override
     public Optional<Seat> save(Seat seat) {
         return Optional.empty();
-    }
-
-    @Override
-    public Integer update(Seat seat) {
-        return null;
     }
 
     @Override

@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * MovieSession service.
+ */
 public class MovieSessionService {
     private MovieSessionDAO movieSessionDAO;
 
@@ -18,6 +21,17 @@ public class MovieSessionService {
         this.movieSessionDAO = movieSessionDAO;
     }
 
+    /**
+     * Gets rows for main page.
+     * Chooses one of overloaded methods depending on parameters.
+     * @param sortParam sort parameters
+     * @param sortDir sort direction
+     * @param keyword name of column for LIKE filter
+     * @param value value
+     * @param page page number
+     * @return list of MovieSession models
+     * @see MovieSession
+     */
     public Page<MovieSession> getIndexTableData(List<String> sortParam, String sortDir, String keyword, String value, Integer page) {
         if (keyword != null && !keyword.equals("")) {
             return movieSessionDAO.findPageSorted(getSortOrders(sortParam, getDirection(sortDir)), page, 5, keyword, value);
@@ -26,10 +40,22 @@ public class MovieSessionService {
                 .findPageSorted(getSortOrders(sortParam, getDirection(sortDir)), page, 5);
     }
 
+    /**
+     * Gets sort order direction ASC or DESC.
+     * @param sortDir sort direction string
+     * @return MySortOrder.Direction
+     */
     private MySortOrder.Direction getDirection(String sortDir) {
         return "desc".equals(sortDir) ? MySortOrder.Direction.DESC : MySortOrder.Direction.ASC;
     }
 
+    /**
+     * Makes list of orders for SQL string.
+     * @param sortParam table column names
+     * @param direction sort direction
+     * @return List with MySortOrder
+     * @see MySortOrder
+     */
     private List<MySortOrder> getSortOrders(List<String> sortParam, MySortOrder.Direction direction) {
         return sortParam.size() > 0 && !"".equals(sortParam.get(0))
                 ? sortParam.stream().map(el -> new MySortOrder(el, direction)).collect(Collectors.toList())

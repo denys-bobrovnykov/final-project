@@ -11,6 +11,9 @@ import java.io.IOException;
 
 import static java.util.Objects.nonNull;
 
+/**
+ * Auth filter for admin pages
+ */
 public class AuthFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

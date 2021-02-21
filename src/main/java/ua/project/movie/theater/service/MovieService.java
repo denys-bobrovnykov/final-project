@@ -6,6 +6,9 @@ import ua.project.movie.theater.exception.AppException;
 
 import java.util.List;
 
+/**
+ * Movie service
+ */
 public class MovieService {
     private final MovieDAO movieDAO;
 

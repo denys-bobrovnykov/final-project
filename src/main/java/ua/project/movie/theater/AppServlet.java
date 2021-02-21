@@ -24,6 +24,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Main application servlet.
+ * Pattern Command.
+ * Commands are stored in context and called depending on request URL.
+ */
 public class AppServlet extends HttpServlet {
     private static final Logger logger = LogManager.getRootLogger();
     private final Map<String, Command> commands = new HashMap<>();

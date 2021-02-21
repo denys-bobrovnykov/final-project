@@ -2,12 +2,25 @@ package ua.project.movie.theater.database.model;
 
 import java.util.Objects;
 
+/**
+ * Seat model
+ */
 public class Seat {
     private Integer id;
     private Integer row;
     private Integer number;
 
     public Seat() {
+    }
+
+    private Seat(Builder builder) {
+        this.id = builder.id;
+        this.row = builder.row;
+        this.number = builder.number;
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     public Integer getId() {
@@ -34,38 +47,6 @@ public class Seat {
         this.number = number;
     }
 
-    private Seat(Builder builder) {
-        this.id = builder.id;
-        this.row = builder.row;
-        this.number = builder.number;
-    }
-
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    public static class Builder {
-        Integer id;
-        Integer row;
-        Integer number;
-
-        public Builder id(Integer id) {
-            this.id = id;
-            return this;
-        }
-        public Builder row(Integer row) {
-            this.row = row;
-            return this;
-        }
-        public Builder number(Integer number) {
-            this.number = number;
-            return this;
-        }
-        public Seat build() {
-            return new Seat(this);
-        }
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -82,5 +63,30 @@ public class Seat {
         int result = row != null ? row.hashCode() : 0;
         result = 31 * result + (number != null ? number.hashCode() : 0);
         return result;
+    }
+
+    public static class Builder {
+        Integer id;
+        Integer row;
+        Integer number;
+
+        public Builder id(Integer id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder row(Integer row) {
+            this.row = row;
+            return this;
+        }
+
+        public Builder number(Integer number) {
+            this.number = number;
+            return this;
+        }
+
+        public Seat build() {
+            return new Seat(this);
+        }
     }
 }

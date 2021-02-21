@@ -8,8 +8,12 @@ import ua.project.movie.theater.exception.AppException;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Ticket service.
+ */
 public class TicketService {
     private final TicketDAO ticketDAO;
+
     public TicketService(TicketDAO ticketDAO) {
         this.ticketDAO = ticketDAO;
     }
@@ -22,10 +26,16 @@ public class TicketService {
         return ticketDAO.getTicketsForUserMovie(user, id).orElseThrow(() -> new AppException("Tickets not found"));
     }
 
+    /**
+     * Calculates average bought tickets per day based on selected period.
+     * @param dates start and end dates
+     * @return Long number
+     * @throws AppException in case of exception in persistence layer
+     */
     public Long getStats(List<LocalDate> dates) throws AppException {
         Long daysCount = Math.abs(dates.get(0).toEpochDay() - dates.get(1).toEpochDay());
         try {
-            return  daysCount == 0
+            return daysCount == 0
                     ? ticketDAO.countAllSeatsBought(dates.get(0), dates.get(1))
                     : ticketDAO.countAllSeatsBought(dates.get(0), dates.get(1)) / daysCount;
         } catch (Exception ex) {

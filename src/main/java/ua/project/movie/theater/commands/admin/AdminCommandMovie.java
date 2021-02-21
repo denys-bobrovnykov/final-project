@@ -17,8 +17,8 @@ import static ua.project.movie.theater.commands.CommandUtility.getFlashAttribute
 import static ua.project.movie.theater.commands.CommandUtility.getValidationProperty;
 
 public class AdminCommandMovie implements Command {
-    private final Logger logger = LogManager.getLogger(AdminCommandMovie.class);
     private static final String POSTER_REGEX = getValidationProperty("file");
+    private final Logger logger = LogManager.getLogger(AdminCommandMovie.class);
     private final MovieService movieService;
 
     public AdminCommandMovie() {

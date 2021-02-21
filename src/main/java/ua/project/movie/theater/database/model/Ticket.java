@@ -1,5 +1,10 @@
 package ua.project.movie.theater.database.model;
 
+import java.util.Objects;
+
+/**
+ * Ticket model
+ */
 public class Ticket {
     private Integer id;
     private MovieSession movieSession;
@@ -7,6 +12,17 @@ public class Ticket {
     private User user;
 
     public Ticket() {
+    }
+
+    private Ticket(Builder builder) {
+        this.id = builder.id;
+        this.movieSession = builder.movieSession;
+        this.seat = builder.seat;
+        this.user = builder.user;
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     public Integer getId() {
@@ -41,19 +57,6 @@ public class Ticket {
         this.user = user;
     }
 
-    private Ticket(Builder builder) {
-        this.id = builder.id;
-        this.movieSession = builder.movieSession;
-        this.seat = builder.seat;
-        this.user = builder.user;
-    }
-
-
-
-    public static Builder builder() {
-        return new Builder();
-    }
-
     public static class Builder {
         Integer id;
         MovieSession movieSession;
@@ -64,20 +67,43 @@ public class Ticket {
             this.id = id;
             return this;
         }
+
         public Builder movieSession(MovieSession movieSession) {
             this.movieSession = movieSession;
             return this;
         }
+
         public Builder user(User user) {
             this.user = user;
             return this;
         }
+
         public Builder seat(Seat seat) {
             this.seat = seat;
             return this;
         }
+
         public Ticket build() {
             return new Ticket(this);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Ticket ticket = (Ticket) o;
+
+        if (!Objects.equals(movieSession, ticket.movieSession))
+            return false;
+        return Objects.equals(seat, ticket.seat);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = movieSession != null ? movieSession.hashCode() : 0;
+        result = 31 * result + (seat != null ? seat.hashCode() : 0);
+        return result;
     }
 }

@@ -21,9 +21,9 @@ import static ua.project.movie.theater.commands.CommandUtility.*;
 public class BuyTicketCommand implements Command {
     private final Logger logger = LogManager.getLogger(BuyTicketCommand.class);
 
-    private MovieSessionService movieSessionService = new MovieSessionService(DAOFactory.getDAOFactory().getMovieSessionDAO());
-    private SeatService seatService = new SeatService(DAOFactory.getDAOFactory().getSeatDAO());
-    private TicketService ticketService = new TicketService(DAOFactory.getDAOFactory().getTicketDAO());
+    private final MovieSessionService movieSessionService = new MovieSessionService(DAOFactory.getDAOFactory().getMovieSessionDAO());
+    private final SeatService seatService = new SeatService(DAOFactory.getDAOFactory().getSeatDAO());
+    private final TicketService ticketService = new TicketService(DAOFactory.getDAOFactory().getTicketDAO());
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {

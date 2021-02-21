@@ -1,5 +1,8 @@
 package ua.project.movie.theater.exception;
 
+/**
+ * Custom named exception.
+ */
 public class AppException extends Exception {
     public AppException() {
         super();

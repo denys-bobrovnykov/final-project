@@ -18,17 +18,20 @@ import java.util.Optional;
 import static ua.project.movie.theater.database.connection.ConnectionPool.closeResourcesWithLogger;
 import static ua.project.movie.theater.database.helpers.Mappers.mapMovieSession;
 
+/**
+ * MovieSessionDAO implementation
+ */
 public class MySqlMovieSessionDAO implements MovieSessionDAO {
     private static final String COUNT_FILTERED = MySqlProperties.getValue("count.all.sessions.filter");
     private static final String ALIAS = MySqlProperties.getValue("count.alias");
-    private final Logger logger = LogManager.getLogger(MySqlMovieSessionDAO.class);
-    private final DataSource connectionPool;
     private static final String FIND_ALL = MySqlProperties.getValue("find.all.sessions");
     private static final String COUNT_ALL = MySqlProperties.getValue("count.all.sessions");
     private static final String ORDER_BY = MySqlProperties.getValue("order.by");
     private static final String LIMIT_P1_OFFSET_P2 = MySqlProperties.getValue("limit.offset");
     private static final String INSERT_MOVIE_SESSION = MySqlProperties.getValue("save.session");
     private static final String DELETE_MOVIE_SESSION = MySqlProperties.getValue("delete.session");
+    private final Logger logger = LogManager.getLogger(MySqlMovieSessionDAO.class);
+    private final DataSource connectionPool;
 
 
     public MySqlMovieSessionDAO(DataSource connectionPool) {
@@ -101,7 +104,7 @@ public class MySqlMovieSessionDAO implements MovieSessionDAO {
         try {
             connection = connectionPool.getConnection();
             connection.setAutoCommit(false);
-            try (PreparedStatement statement = connection.prepareStatement(SqlQueryBuilder.buildQuery(COUNT_FILTERED, "WHERE "+ keyword +" LIKE ?", ALIAS))) {
+            try (PreparedStatement statement = connection.prepareStatement(SqlQueryBuilder.buildQuery(COUNT_FILTERED, "WHERE " + keyword + " LIKE ?", ALIAS))) {
                 statement.setString(1, "%" + value + "%");
                 resultSet = statement.executeQuery();
                 resultSet.next();
@@ -110,7 +113,7 @@ public class MySqlMovieSessionDAO implements MovieSessionDAO {
             }
             stmt = connection
                     .prepareStatement(SqlQueryBuilder
-                            .buildQuery(FIND_ALL, "WHERE "+ keyword +" LIKE ?", ORDER_BY, buildOrdersString(order),
+                            .buildQuery(FIND_ALL, "WHERE " + keyword + " LIKE ?", ORDER_BY, buildOrdersString(order),
                                     LIMIT_P1_OFFSET_P2));
             stmt.setString(1, "%" + value + "%");
             stmt.setInt(2, pageSize);
@@ -127,7 +130,7 @@ public class MySqlMovieSessionDAO implements MovieSessionDAO {
                 try {
                     connection.rollback();
                 } catch (SQLException ex2) {
-                  logger.error(ex2);
+                    logger.error(ex2);
                 }
                 closeResourcesWithLogger(connection, stmt, resultSet, logger);
             }
@@ -207,11 +210,6 @@ public class MySqlMovieSessionDAO implements MovieSessionDAO {
             closeResourcesWithLogger(connection, stmt, resultSet, logger);
         }
         return Optional.empty();
-    }
-
-    @Override
-    public Integer update(MovieSession movieSession) {
-        return null;
     }
 
     private String buildOrdersString(List<MySortOrder> mySortOrders) {

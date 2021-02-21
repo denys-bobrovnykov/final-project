@@ -3,17 +3,16 @@ package ua.project.movie.theater.database.model;
 
 import java.util.Objects;
 
+/**
+ * Movie model
+ */
 public class Movie {
+    private final Integer releaseYear;
+    private final Integer runningTime;
     private Integer id;
     private String titleEn;
     private String titleUa;
-    private Integer releaseYear;
-    private Integer runningTime;
     private String poster;
-
-    public static Builder builder() {
-        return new Builder();
-    }
 
     private Movie(Builder builder) {
         this.id = builder.id;
@@ -24,43 +23,8 @@ public class Movie {
         this.poster = builder.poster;
     }
 
-    public static class Builder {
-         Integer id;
-         String titleEn;
-         String titleUa;
-         Integer releaseYear;
-         Integer runningTime;
-         String poster;
-
-         public Movie build() {
-             return new Movie(this);
-         }
-
-         public Builder id(Integer id) {
-             this.id = id;
-             return this;
-         }
-         public Builder titleEn(String titleEn) {
-             this.titleEn = titleEn;
-             return this;
-         }
-         public Builder titleUa(String titleUa) {
-             this.titleUa = titleUa;
-             return this;
-         }
-         public Builder releaseYear(Integer releaseYear) {
-             this.releaseYear = releaseYear;
-             return this;
-         }
-         public Builder poster(String poster) {
-             this.poster = poster;
-             return this;
-         }
-
-        public Builder runningTime(Integer runningTime) {
-             this.runningTime = runningTime;
-             return this;
-        }
+    public static Builder builder() {
+        return new Builder();
     }
 
     public Integer getId() {
@@ -91,16 +55,8 @@ public class Movie {
         return releaseYear;
     }
 
-    public void setReleaseYear(Integer releaseYear) {
-        this.releaseYear = releaseYear;
-    }
-
     public Integer getRunningTime() {
         return runningTime;
-    }
-
-    public void setRunningTime(Integer runningTime) {
-        this.runningTime = runningTime;
     }
 
     public String getPoster() {
@@ -138,5 +94,48 @@ public class Movie {
         return "Movie{" +
                 "titleEn='" + titleEn + '\'' +
                 '}';
+    }
+
+    public static class Builder {
+        Integer id;
+        String titleEn;
+        String titleUa;
+        Integer releaseYear;
+        Integer runningTime;
+        String poster;
+
+        public Movie build() {
+            return new Movie(this);
+        }
+
+        public Builder id(Integer id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder titleEn(String titleEn) {
+            this.titleEn = titleEn;
+            return this;
+        }
+
+        public Builder titleUa(String titleUa) {
+            this.titleUa = titleUa;
+            return this;
+        }
+
+        public Builder releaseYear(Integer releaseYear) {
+            this.releaseYear = releaseYear;
+            return this;
+        }
+
+        public Builder poster(String poster) {
+            this.poster = poster;
+            return this;
+        }
+
+        public Builder runningTime(Integer runningTime) {
+            this.runningTime = runningTime;
+            return this;
+        }
     }
 }

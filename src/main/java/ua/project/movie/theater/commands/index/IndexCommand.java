@@ -14,7 +14,7 @@ import static ua.project.movie.theater.commands.CommandUtility.*;
 
 public class IndexCommand implements Command {
 
-    private MovieSessionService movieSessionService = new MovieSessionService(DAOFactory.getDAOFactory().getMovieSessionDAO());
+    private final MovieSessionService movieSessionService = new MovieSessionService(DAOFactory.getDAOFactory().getMovieSessionDAO());
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
@@ -26,7 +26,6 @@ public class IndexCommand implements Command {
         List<String> sortParamList = getParamList(sortParam);
         Page<MovieSession> movieSessionPage = movieSessionService.getIndexTableData(sortParamList, sortDir, keyword, value, page);
         request.setAttribute("flash", copyFlash(request));
-//        getFlashAttributesContainer(request).clear();
         request.setAttribute("rows", movieSessionPage);
         request.setAttribute("current_page", page);
         request.setAttribute("pages", movieSessionPage.getPageCount());

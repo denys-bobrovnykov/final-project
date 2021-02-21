@@ -18,15 +18,18 @@ import java.util.Optional;
 import static ua.project.movie.theater.database.connection.ConnectionPool.closeResourcesWithLogger;
 import static ua.project.movie.theater.database.helpers.Mappers.*;
 
+/**
+ * TicketDAO implementation
+ */
 public class MySqlTicketDAO implements TicketDAO {
-    private final Logger logger = LogManager.getLogger(MySqlTicketDAO.class);
-    private final DataSource connectionPool;
     private static final String INSERT_INTO_TICKETS = MySqlProperties.getValue("insert.ticket");
     private static final String INSERT_INTO_SESSION_TICKETS = MySqlProperties.getValue("insert.in.session.seat");
     private static final String GET_USER_TICKETS = MySqlProperties.getValue("get.user.tickets");
     private static final String FOR_SESSION = MySqlProperties.getValue("for.buy.page");
     private static final String COUNT_SEATS_BOUGHT = MySqlProperties.getValue("count.seats.bought");
     private static final String GET_ALL_USER_TICKETS = MySqlProperties.getValue("get.tickets.for.user");
+    private final Logger logger = LogManager.getLogger(MySqlTicketDAO.class);
+    private final DataSource connectionPool;
 
 
     public MySqlTicketDAO(DataSource connectionPool) {
