@@ -1,6 +1,6 @@
-package ua.epam.project.movie.theater.database;
+package ua.project.movie.theater.database;
 
-import ua.epam.project.movie.theater.database.model.User;
+import ua.project.movie.theater.database.model.User;
 
 import java.sql.SQLException;
 import java.util.Optional;

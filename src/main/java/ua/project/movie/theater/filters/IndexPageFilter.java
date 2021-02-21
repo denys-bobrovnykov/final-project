@@ -1,4 +1,4 @@
-package ua.epam.project.movie.theater.filters;
+package ua.project.movie.theater.filters;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

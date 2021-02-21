@@ -1,8 +1,8 @@
-package ua.epam.project.movie.theater.service;
+package ua.project.movie.theater.service;
 
-import ua.epam.project.movie.theater.database.DAOFactory;
-import ua.epam.project.movie.theater.database.model.User;
-import ua.epam.project.movie.theater.exception.AppException;
+import ua.project.movie.theater.database.DAOFactory;
+import ua.project.movie.theater.database.model.User;
+import ua.project.movie.theater.exception.AppException;
 
 
 public class LoginService {

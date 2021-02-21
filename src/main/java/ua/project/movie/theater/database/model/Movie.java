@@ -1,4 +1,4 @@
-package ua.epam.project.movie.theater.database.model;
+package ua.project.movie.theater.database.model;
 
 
 import java.util.Objects;

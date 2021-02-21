@@ -1,4 +1,4 @@
-package ua.epam.project.movie.theater.filters;
+package ua.project.movie.theater.filters;
 
 import javax.servlet.*;
 import java.io.IOException;

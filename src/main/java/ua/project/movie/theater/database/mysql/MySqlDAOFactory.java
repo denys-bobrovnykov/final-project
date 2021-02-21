@@ -1,9 +1,7 @@
-package ua.epam.project.movie.theater.database.mysql;
+package ua.project.movie.theater.database.mysql;
 
-import ua.epam.project.movie.theater.database.DAOFactory;
-import ua.epam.project.movie.theater.database.MovieSessionDAO;
-import ua.epam.project.movie.theater.database.UserDAO;
-import ua.epam.project.movie.theater.database.connection.ConnectionPool;
+import ua.project.movie.theater.database.*;
+import ua.project.movie.theater.database.connection.ConnectionPool;
 
 import javax.sql.DataSource;
 
@@ -30,5 +28,20 @@ public class MySqlDAOFactory extends DAOFactory {
     @Override
     public MovieSessionDAO getMovieSessionDAO() {
         return new MySqlMovieSessionDAO(ds);
+    }
+
+    @Override
+    public MovieDAO getMovieDao() {
+        return new MySqlMovieDAO(ds);
+    }
+
+    @Override
+    public SeatDAO getSeatDAO() {
+        return new MySqlSeatDAO(ds);
+    }
+
+    @Override
+    public TicketDAO getTicketDAO() {
+        return new MySqlTicketDAO(ds);
     }
 }

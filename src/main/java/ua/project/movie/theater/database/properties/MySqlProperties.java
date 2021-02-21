@@ -1,6 +1,6 @@
-package ua.epam.project.movie.theater.database.properties;
+package ua.project.movie.theater.database.properties;
 
-import ua.epam.project.movie.theater.database.connection.ConnectionPool;
+import ua.project.movie.theater.database.connection.ConnectionPool;
 
 import java.io.IOException;
 import java.io.InputStream;

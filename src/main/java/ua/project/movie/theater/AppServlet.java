@@ -1,15 +1,17 @@
-package ua.epam.project.movie.theater;
+package ua.project.movie.theater;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.epam.project.movie.theater.commands.*;
-import ua.epam.project.movie.theater.commands.admin.AdminCommand;
-import ua.epam.project.movie.theater.commands.admin.AdminCommandCreateMovie;
-import ua.epam.project.movie.theater.commands.index.IndexCommand;
-import ua.epam.project.movie.theater.commands.login.LoginCommand;
-import ua.epam.project.movie.theater.commands.logout.LogOutCommand;
-import ua.epam.project.movie.theater.commands.registration.RegistrationCommand;
-import ua.epam.project.movie.theater.database.model.User;
+import ua.project.movie.theater.commands.*;
+import ua.project.movie.theater.commands.admin.AdminCommand;
+import ua.project.movie.theater.commands.admin.AdminCommandSession;
+import ua.project.movie.theater.commands.buy.BuyTicketCommand;
+import ua.project.movie.theater.commands.details.SessionDetailsCommand;
+import ua.project.movie.theater.commands.index.IndexCommand;
+import ua.project.movie.theater.commands.login.LoginCommand;
+import ua.project.movie.theater.commands.logout.LogOutCommand;
+import ua.project.movie.theater.commands.registration.RegistrationCommand;
+import ua.project.movie.theater.database.model.User;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -35,7 +37,9 @@ public class AppServlet extends HttpServlet {
         commands.put("registration", new RegistrationCommand());
         commands.put("exception" , new ExceptionCommand());
         commands.put("admin", new AdminCommand());
-        commands.put("admin/sessions", new AdminCommandCreateMovie());
+        commands.put("admin/sessions", new AdminCommandSession());
+        commands.put("details", new SessionDetailsCommand());
+        commands.put("buy", new BuyTicketCommand());
     }
 
     public void doGet(HttpServletRequest request,

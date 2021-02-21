@@ -1,4 +1,4 @@
-package ua.epam.project.movie.theater.exception;
+package ua.project.movie.theater.exception;
 
 public class AppException extends Exception {
     public AppException() {

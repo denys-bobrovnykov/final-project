@@ -1,4 +1,4 @@
-package ua.epam.project.movie.theater.filters;
+package ua.project.movie.theater.filters;
 
 
 import javax.servlet.*;
@@ -38,5 +38,10 @@ public class LoggedUserFilter implements Filter {
         } else {
             filterChain.doFilter(request, response);
         }
+    }
+
+    @Override
+    public void destroy() {
+
     }
 }

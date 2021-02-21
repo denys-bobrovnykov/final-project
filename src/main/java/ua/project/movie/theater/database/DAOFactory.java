@@ -1,7 +1,6 @@
-package ua.epam.project.movie.theater.database;
+package ua.project.movie.theater.database;
 
-import ua.epam.project.movie.theater.database.mysql.MySqlDAOFactory;
-import ua.epam.project.movie.theater.database.postgres.PostgresDAOFactory;
+import ua.project.movie.theater.database.mysql.MySqlDAOFactory;
 
 public abstract class DAOFactory {
     public static final String POSTGRES = "Postgres";
@@ -11,15 +10,12 @@ public abstract class DAOFactory {
         return MySqlDAOFactory.getInstance();
     }
 
-    public static DAOFactory getDAOFactory(String name) {
-        if (POSTGRES.equalsIgnoreCase(name)) {
-            return PostgresDAOFactory.getInstance();
-        } else if (MYSQL.equalsIgnoreCase(name)) {
-            return MySqlDAOFactory.getInstance();
-        }
-        throw new RuntimeException("Unknown factory");
-    }
-
     public abstract UserDAO getUserDAO();
     public abstract MovieSessionDAO getMovieSessionDAO();
+
+    public abstract MovieDAO getMovieDao();
+
+    public abstract SeatDAO getSeatDAO();
+
+    public abstract TicketDAO getTicketDAO();
 }

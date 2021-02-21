@@ -3,6 +3,7 @@ package ua.project.movie.theater.commands.admin;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.project.movie.theater.commands.Command;
+import ua.project.movie.theater.database.DAOFactory;
 import ua.project.movie.theater.database.model.Movie;
 import ua.project.movie.theater.database.model.MovieSession;
 import ua.project.movie.theater.service.MovieSessionService;
@@ -21,12 +22,12 @@ import static ua.project.movie.theater.commands.CommandUtility.getFlashAttribute
  * On GET redirects to /app/admin
  * It handles mew movie session creation.
  */
-public class AdminCommandCreateSession implements Command {
-    private final Logger logger = LogManager.getLogger(AdminCommandCreateSession.class);
+public class AdminCommandSession implements Command {
+    private final Logger logger = LogManager.getLogger(AdminCommandSession.class);
     private MovieSessionService movieSessionService;
 
-    public AdminCommandCreateSession() {
-        movieSessionService = MovieSessionService.getInstance();
+    public AdminCommandSession() {
+        movieSessionService = new MovieSessionService(DAOFactory.getDAOFactory().getMovieSessionDAO());
     }
 
     @Override

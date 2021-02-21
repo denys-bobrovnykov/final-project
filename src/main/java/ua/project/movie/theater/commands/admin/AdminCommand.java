@@ -1,6 +1,6 @@
-package ua.epam.project.movie.theater.commands.admin;
+package ua.project.movie.theater.commands.admin;
 
-import ua.epam.project.movie.theater.commands.Command;
+import ua.project.movie.theater.commands.Command;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

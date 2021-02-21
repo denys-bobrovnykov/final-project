@@ -1,13 +1,10 @@
-package ua.epam.project.movie.theater.commands;
+package ua.project.movie.theater.commands;
 
 
-import ua.epam.project.movie.theater.database.model.User;
+import ua.project.movie.theater.database.model.User;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class CommandUtility {
 
@@ -21,15 +18,16 @@ public class CommandUtility {
         loggedUsers.add(user);
         request.getSession().getServletContext()
                 .setAttribute("loggedUsers", loggedUsers);
+        request.getSession().setAttribute("user", user);
         return false;
     }
 
-    public static List<String> getSortParamList(String[] sortParam) {
+    public static List<String> getParamList(String[] sortParam) {
         return sortParam.length > 0 ? Arrays.asList(sortParam) : new ArrayList<>(0);
     }
 
-    public static  String[] getSortParam(HttpServletRequest request) {
-        return request.getParameterMap().get("sort") != null ? request.getParameterMap().get("sort") : new String[]{};
+    public static  String[] getParams(HttpServletRequest request, String param) {
+        return request.getParameterMap().get(param) != null ? (String[]) request.getParameterMap().get(param) : new String[]{};
     }
 
     public static  int getPageNumber(HttpServletRequest request) {
@@ -43,6 +41,17 @@ public class CommandUtility {
         StringBuilder builder = new StringBuilder();
         Arrays.stream(sortParam).forEach(param -> builder.append("&sort=").append(param));
         return builder.toString().length() > 0 ?  builder.substring("&sort=".length()) : builder.toString();
+    }
+
+    public static HashMap<String, Object> getFlashAttributesContainer(HttpServletRequest request) {
+        return (HashMap<String, Object>) request.getSession().getAttribute("flash");
+    }
+
+    public static HashMap<String, Object> copyFlash(HttpServletRequest request) {
+        HashMap<String, Object> original = (HashMap<String, Object>) request.getSession().getAttribute("flash");
+        HashMap<String, Object> copy = new HashMap<>();
+        copy.putAll(original);
+        return copy;
     }
 
 }

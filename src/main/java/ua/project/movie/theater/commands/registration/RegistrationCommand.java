@@ -1,11 +1,11 @@
-package ua.epam.project.movie.theater.commands.registration;
+package ua.project.movie.theater.commands.registration;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.epam.project.movie.theater.commands.Command;
-import ua.epam.project.movie.theater.database.model.User;
-import ua.epam.project.movie.theater.service.LoginService;
-import ua.epam.project.movie.theater.utils.passwordencoder.BCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import ua.project.movie.theater.commands.Command;
+import ua.project.movie.theater.database.model.User;
+import ua.project.movie.theater.service.LoginService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +14,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+
+import static ua.project.movie.theater.commands.CommandUtility.getFlashAttributesContainer;
 
 public class RegistrationCommand implements Command {
     private final Logger logger = LogManager.getLogger(RegistrationCommand.class);
@@ -51,7 +53,8 @@ public class RegistrationCommand implements Command {
                 try {
                     logger.info("In try");
                     loginService.saveNewUser(User.builder().email(email).password(pass).role(User.Role.USER).build());
-                    return request.getContextPath() + "redirect:/home" + "?success=registration";
+                    getFlashAttributesContainer(request).put("success", "registration");
+                    return request.getContextPath() + "redirect:/home";
                 } catch (Exception ex) {
                     logger.info(ex);
                     errors.add("creation error");

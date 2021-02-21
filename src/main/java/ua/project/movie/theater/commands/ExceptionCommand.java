@@ -1,4 +1,4 @@
-package ua.epam.project.movie.theater.commands;
+package ua.project.movie.theater.commands;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

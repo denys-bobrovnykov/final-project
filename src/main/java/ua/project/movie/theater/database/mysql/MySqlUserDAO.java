@@ -1,19 +1,20 @@
-package ua.epam.project.movie.theater.database.mysql;
+package ua.project.movie.theater.database.mysql;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-import ua.epam.project.movie.theater.database.GenericCrudDAO;
-import ua.epam.project.movie.theater.database.UserDAO;
-import ua.epam.project.movie.theater.database.model.User;
-import ua.epam.project.movie.theater.database.properties.MySqlProperties;
+import ua.project.movie.theater.database.GenericCrudDAO;
+import ua.project.movie.theater.database.UserDAO;
+import ua.project.movie.theater.database.model.User;
+import ua.project.movie.theater.database.properties.MySqlProperties;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 
-import static ua.epam.project.movie.theater.database.connection.ConnectionPool.closeResourcesWithLogger;
+import static ua.project.movie.theater.database.connection.ConnectionPool.closeResourcesWithLogger;
+import static ua.project.movie.theater.database.helpers.Mappers.mapUser;
 
 
 public class MySqlUserDAO implements GenericCrudDAO<User>, UserDAO {
@@ -93,15 +94,6 @@ public class MySqlUserDAO implements GenericCrudDAO<User>, UserDAO {
     @Override
     public Integer update(User user) {
         throw new NotImplementedException();
-    }
-
-    private User mapUser(ResultSet resultSet) throws SQLException {
-        return User.builder()
-                .id(resultSet.getInt("id"))
-                .email(resultSet.getString("email"))
-                .password(resultSet.getString("password"))
-                .role(User.Role.valueOf(resultSet.getString("role")))
-                .build();
     }
 
 }

@@ -1,2 +1,5 @@
-package ua.project.movie.theater.commands.admin;public class AdminCommandSessionRemove {
+package ua.project.movie.theater.commands.admin;
+
+public class AdminCommandSessionRemove {
+
 }

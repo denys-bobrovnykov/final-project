@@ -1,8 +1,9 @@
-package ua.epam.project.movie.theater.database.model;
+package ua.project.movie.theater.database.model;
 
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Objects;
 
 public class MovieSession {
@@ -10,7 +11,16 @@ public class MovieSession {
     private LocalDate dayOfSession;
     private LocalTime timeStart;
     private Movie movie;
+    private List<Seat> seats;
     private Integer seatsAvailable;
+
+    public List<Seat> getSeats() {
+        return seats;
+    }
+
+    public void setSeats(List<Seat> seats) {
+        this.seats = seats;
+    }
 
     public Movie getMovie() {
         return movie;
@@ -62,13 +72,15 @@ public class MovieSession {
         this.timeStart = builder.timeStart;
         this.movie = builder.movie;
         this.seatsAvailable = builder.seatsAvailable;
+        this.seats = builder.seats;
     }
 
     public static class Builder {
          Integer id;
          LocalDate dayOfSession;
          LocalTime timeStart;
-        Movie movie;
+         Movie movie;
+         List<Seat> seats;
          Integer seatsAvailable;
 
         public MovieSession build() {
@@ -94,6 +106,10 @@ public class MovieSession {
 
         public Builder movie(Movie movie) {
             this.movie = movie;
+            return this;
+        }
+        public Builder seats(List<Seat> movie) {
+            this.seats = seats;
             return this;
         }
     }

@@ -1,7 +1,7 @@
-package ua.epam.project.movie.theater.filters;
+package ua.project.movie.theater.filters;
 
 
-import ua.epam.project.movie.theater.database.model.User;
+import ua.project.movie.theater.database.model.User;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -37,5 +37,10 @@ public class AuthFilter implements Filter {
         } else {
             ((HttpServletResponse) response).sendRedirect(req.getContextPath() + "/app/home");
         }
+    }
+
+    @Override
+    public void destroy() {
+
     }
 }

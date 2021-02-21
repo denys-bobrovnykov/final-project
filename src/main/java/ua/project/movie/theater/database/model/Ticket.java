@@ -1,10 +1,10 @@
-package ua.epam.project.movie.theater.database.model;
+package ua.project.movie.theater.database.model;
 
 public class Ticket {
     private Integer id;
-    private Integer movieSessionId;
-    private Integer seatId;
-    private Integer userId;
+    private MovieSession movieSession;
+    private Seat seat;
+    private User user;
 
     public Ticket() {
     }
@@ -17,27 +17,67 @@ public class Ticket {
         this.id = id;
     }
 
-    public Integer getMovieSessionId() {
-        return movieSessionId;
+    public MovieSession getMovieSession() {
+        return movieSession;
     }
 
-    public void setMovieSessionId(Integer movieSessionId) {
-        this.movieSessionId = movieSessionId;
+    public void setMovieSession(MovieSession movieSession) {
+        this.movieSession = movieSession;
     }
 
-    public Integer getSeatId() {
-        return seatId;
+    public Seat getSeat() {
+        return seat;
     }
 
-    public void setSeatId(Integer seatId) {
-        this.seatId = seatId;
+    public void setSeat(Seat seat) {
+        this.seat = seat;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    private Ticket(Builder builder) {
+        this.id = builder.id;
+        this.movieSession = builder.movieSession;
+        this.seat = builder.seat;
+        this.user = builder.user;
+    }
+
+
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        Integer id;
+        MovieSession movieSession;
+        Seat seat;
+        User user;
+
+        public Builder id(Integer id) {
+            this.id = id;
+            return this;
+        }
+        public Builder movieSession(MovieSession movieSession) {
+            this.movieSession = movieSession;
+            return this;
+        }
+        public Builder user(User user) {
+            this.user = user;
+            return this;
+        }
+        public Builder seat(Seat seat) {
+            this.seat = seat;
+            return this;
+        }
+        public Ticket build() {
+            return new Ticket(this);
+        }
     }
 }

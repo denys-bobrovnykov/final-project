@@ -1,4 +1,4 @@
-package ua.epam.project.movie.theater.database.helpers;
+package ua.project.movie.theater.database.helpers;
 
 public class MySortOrder {
     private String sortParam;

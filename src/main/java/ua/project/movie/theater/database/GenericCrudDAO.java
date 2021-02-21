@@ -1,4 +1,4 @@
-package ua.epam.project.movie.theater.database;
+package ua.project.movie.theater.database;
 
 import java.sql.SQLException;
 import java.util.List;

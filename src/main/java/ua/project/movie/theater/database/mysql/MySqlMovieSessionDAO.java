@@ -1,23 +1,21 @@
-package ua.epam.project.movie.theater.database.mysql;
+package ua.project.movie.theater.database.mysql;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.epam.project.movie.theater.database.MovieSessionDAO;
-import ua.epam.project.movie.theater.database.helpers.Page;
-import ua.epam.project.movie.theater.database.helpers.SqlQueryBuilder;
-import ua.epam.project.movie.theater.database.model.Movie;
-import ua.epam.project.movie.theater.database.model.MovieSession;
-import ua.epam.project.movie.theater.database.properties.MySqlProperties;
+import ua.project.movie.theater.database.MovieSessionDAO;
+import ua.project.movie.theater.database.helpers.Page;
+import ua.project.movie.theater.database.helpers.SqlQueryBuilder;
+import ua.project.movie.theater.database.model.MovieSession;
+import ua.project.movie.theater.database.properties.MySqlProperties;
 
 import javax.sql.DataSource;
 import java.sql.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static ua.epam.project.movie.theater.database.connection.ConnectionPool.closeResourcesWithLogger;
+import static ua.project.movie.theater.database.connection.ConnectionPool.closeResourcesWithLogger;
+import static ua.project.movie.theater.database.helpers.Mappers.mapMovieSession;
 
 public class MySqlMovieSessionDAO implements MovieSessionDAO {
     private final Logger logger = LogManager.getLogger(MySqlMovieSessionDAO.class);
@@ -53,13 +51,6 @@ public class MySqlMovieSessionDAO implements MovieSessionDAO {
         return movieSessions;
     }
 
-    @Override
-    public Page<MovieSession> findPage(Integer page, Integer size) {
-
-        Page<MovieSession> pageOfSessions = new Page<>();
-
-        return null;
-    }
 
     @Override
     public Page<MovieSession> findPageSorted(List order, Integer pageNum, Integer pageSize) {
@@ -96,18 +87,11 @@ public class MySqlMovieSessionDAO implements MovieSessionDAO {
 
     public Page<MovieSession> findPageSorted(List order, Integer pageNum, Integer pageSize, String keyword, String value) {
         Page<MovieSession> movieSessionPage = new Page<>();
-        int totalRowsCount;
         Connection connection = null;
         PreparedStatement stmt = null;
         ResultSet resultSet = null;
         try {
             connection = connectionPool.getConnection();
-            try (Statement statement = connection.createStatement()) {
-                resultSet = statement.executeQuery(COUNT_ALL);
-                resultSet.next();
-                totalRowsCount = resultSet.getInt(1);
-            }
-            movieSessionPage.setPageCount(pageSize, totalRowsCount);
             stmt = connection
                     .prepareStatement(SqlQueryBuilder
                             .buildQuery(FIND_ALL, "WHERE "+ keyword +" LIKE ?", ORDER_BY, buildOrdersString(order),
@@ -119,6 +103,7 @@ public class MySqlMovieSessionDAO implements MovieSessionDAO {
             while (resultSet.next()) {
                 movieSessionPage.add(mapMovieSession(resultSet));
             }
+            movieSessionPage.setPageCount(pageSize, movieSessionPage.size());
             return movieSessionPage;
         } catch (SQLException ex) {
             logger.error(ex);
@@ -130,6 +115,20 @@ public class MySqlMovieSessionDAO implements MovieSessionDAO {
 
     @Override
     public Optional<MovieSession> findOne(MovieSession movieSession) {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        ResultSet resultSet = null;
+        try {
+            connection = connectionPool.getConnection();
+            stmt = connection.prepareStatement(SqlQueryBuilder.buildQuery(FIND_ALL, "WHERE ms.id = ?"));
+            stmt.setInt(1, movieSession.getId());
+            resultSet = stmt.executeQuery();
+            if (resultSet.next()) {
+                return Optional.of(mapMovieSession(resultSet));
+            }
+        } catch (SQLException e) {
+            logger.error(e);
+        }
         return Optional.empty();
     }
 
@@ -141,22 +140,6 @@ public class MySqlMovieSessionDAO implements MovieSessionDAO {
     @Override
     public Integer update(MovieSession movieSession) {
         return null;
-    }
-
-    private MovieSession mapMovieSession(ResultSet resultSet) throws SQLException {
-        return MovieSession.builder()
-                .id(resultSet.getInt("ms.id"))
-                .dayOfSession(LocalDate.parse(resultSet.getString("ms.day_of_session")))
-                .timeStart(LocalTime.parse(resultSet.getString("ms.time_start")))
-                .movie(Movie.builder()
-                        .id(resultSet.getInt("m.id"))
-                        .titleEn(resultSet.getString("m.title_en"))
-                        .titleUa(resultSet.getString("m.title_ua"))
-                        .releaseYear(resultSet.getInt("m.release_year"))
-                        .runningTime(resultSet.getInt("m.running_time"))
-                        .build())
-                .seatsAvailable(resultSet.getInt("seats_avail"))
-                .build();
     }
 
     private String buildOrdersString(List mySortOrders) {

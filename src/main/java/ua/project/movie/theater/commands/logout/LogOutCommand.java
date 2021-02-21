@@ -1,7 +1,7 @@
-package ua.epam.project.movie.theater.commands.logout;
+package ua.project.movie.theater.commands.logout;
 
-import ua.epam.project.movie.theater.commands.Command;
-import ua.epam.project.movie.theater.database.model.User;
+import ua.project.movie.theater.commands.Command;
+import ua.project.movie.theater.database.model.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" name="MovieTheater" packages="">
+    <Appenders>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+            </PatternLayout>
+        </Console>
+        <RollingFile
+                name="rollingFile"
+                fileName="/Users/Denys/!_EPAM/Final_Project/movie_theater/logs/application.log"
+                filePattern="logs/application.%i.log.gz"
+                ignoreExceptions="false">
+            <PatternLayout>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="5" />
+        </RollingFile>
+        <File name="MyFile" fileName="/Users/Denys/!_EPAM/Final_Project/movie_theater/logs/app.log" append="false">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+            </PatternLayout>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Root level="debug">
+            <AppenderRef ref="STDOUT" />
+            <AppenderRef ref="rollingFile" />
+        </Root>
+    </Loggers>
+</Configuration>

@@ -1,2 +1,4 @@
-package ua.project.movie.theater.commands.admin;public class AdminCommandMovie {
+package ua.project.movie.theater.commands.admin;
+
+public class AdminCommandMovie {
 }

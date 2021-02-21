@@ -1,16 +1,18 @@
-package ua.epam.project.movie.theater.listeners;
+package ua.project.movie.theater.listeners;
 
-import ua.epam.project.movie.theater.database.model.User;
+import ua.project.movie.theater.database.model.User;
 
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class SessionListener implements HttpSessionListener {
 
     @Override
     public void sessionCreated(HttpSessionEvent se) {
-
+        se.getSession().setAttribute("flash", new HashMap<String, Object>());
+        se.getSession().setAttribute("currentLocale", "ua");
     }
 
     @Override
@@ -22,5 +24,6 @@ public class SessionListener implements HttpSessionListener {
                 .getAttribute("user");
         loggedUsers.remove(user);
         se.getSession().setAttribute("loggedUsers", loggedUsers);
+        se.getSession().removeAttribute("flash");
     }
 }
