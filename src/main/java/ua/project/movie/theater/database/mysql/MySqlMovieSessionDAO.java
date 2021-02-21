@@ -18,6 +18,8 @@ import static ua.project.movie.theater.database.connection.ConnectionPool.closeR
 import static ua.project.movie.theater.database.helpers.Mappers.mapMovieSession;
 
 public class MySqlMovieSessionDAO implements MovieSessionDAO {
+    private static final String COUNT_FILTERED = MySqlProperties.getValue("count.all.sessions.filter");
+    private static final String ALIAS = MySqlProperties.getValue("count.alias");
     private final Logger logger = LogManager.getLogger(MySqlMovieSessionDAO.class);
     private final DataSource connectionPool;
     private static final String FIND_ALL = MySqlProperties.getValue("find.all.sessions");
@@ -61,6 +63,7 @@ public class MySqlMovieSessionDAO implements MovieSessionDAO {
         ResultSet resultSet = null;
         try {
             connection = connectionPool.getConnection();
+            connection.setAutoCommit(false);
             try (Statement statement = connection.createStatement()) {
                 resultSet = statement.executeQuery(COUNT_ALL);
                 resultSet.next();
@@ -76,6 +79,7 @@ public class MySqlMovieSessionDAO implements MovieSessionDAO {
             while (resultSet.next()) {
                 movieSessionPage.add(mapMovieSession(resultSet));
             }
+            connection.commit();
             return movieSessionPage;
         } catch (SQLException ex) {
             logger.error(ex);
@@ -92,6 +96,14 @@ public class MySqlMovieSessionDAO implements MovieSessionDAO {
         ResultSet resultSet = null;
         try {
             connection = connectionPool.getConnection();
+            connection.setAutoCommit(false);
+            try (PreparedStatement statement = connection.prepareStatement(SqlQueryBuilder.buildQuery(COUNT_FILTERED, "WHERE "+ keyword +" LIKE ?", ALIAS))) {
+                statement.setString(1, "%" + value + "%");
+                resultSet = statement.executeQuery();
+                resultSet.next();
+                int totalRowsCount = resultSet.getInt("row_count");
+                movieSessionPage.setPageCount(pageSize, totalRowsCount);
+            }
             stmt = connection
                     .prepareStatement(SqlQueryBuilder
                             .buildQuery(FIND_ALL, "WHERE "+ keyword +" LIKE ?", ORDER_BY, buildOrdersString(order),
@@ -103,10 +115,18 @@ public class MySqlMovieSessionDAO implements MovieSessionDAO {
             while (resultSet.next()) {
                 movieSessionPage.add(mapMovieSession(resultSet));
             }
-            movieSessionPage.setPageCount(pageSize, movieSessionPage.size());
+            connection.commit();
             return movieSessionPage;
         } catch (SQLException ex) {
             logger.error(ex);
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException ex2) {
+                  logger.error(ex2);
+                }
+                closeResourcesWithLogger(connection, stmt, resultSet, logger);
+            }
         } finally {
             closeResourcesWithLogger(connection, stmt, resultSet, logger);
         }
@@ -128,6 +148,8 @@ public class MySqlMovieSessionDAO implements MovieSessionDAO {
             }
         } catch (SQLException e) {
             logger.error(e);
+        } finally {
+            closeResourcesWithLogger(connection, stmt, resultSet, logger);
         }
         return Optional.empty();
     }
