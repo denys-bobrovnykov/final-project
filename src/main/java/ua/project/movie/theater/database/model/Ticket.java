@@ -106,4 +106,12 @@ public class Ticket {
         result = 31 * result + (seat != null ? seat.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Ticket{" +
+                "movieSession=" + movieSession.getMovie().getTitleEn() +
+                ", id=" + id +
+                '}';
+    }
 }

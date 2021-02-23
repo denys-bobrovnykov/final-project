@@ -36,7 +36,7 @@ public class MySqlTicketDAO implements TicketDAO {
         this.connectionPool = connectionPool;
     }
 
-    public Optional<Integer> buyTickets(Integer movieSessionId, String[] seatIds, int userId) {
+    public Optional<Integer> buyTickets(Integer movieSessionId, List<Integer> seatIds, int userId) {
         Connection connection = null;
         PreparedStatement stmt = null;
         PreparedStatement stmt2 = null;
@@ -45,17 +45,17 @@ public class MySqlTicketDAO implements TicketDAO {
             connection = connectionPool.getConnection();
             connection.setAutoCommit(false);
             stmt = connection.prepareStatement(INSERT_INTO_TICKETS, Statement.RETURN_GENERATED_KEYS);
-            for (String seatId : seatIds) {
+            for (Integer seatId : seatIds) {
                 stmt.setInt(1, movieSessionId);
-                stmt.setInt(2, Integer.parseInt(seatId));
+                stmt.setInt(2, seatId);
                 stmt.setInt(3, userId);
                 stmt.addBatch();
             }
             int[] count = stmt.executeBatch();
             resultSet = stmt.getGeneratedKeys();
             stmt2 = connection.prepareStatement(INSERT_INTO_SESSION_TICKETS);
-            for (String seatId : seatIds) {
-                stmt2.setInt(1, Integer.parseInt(seatId));
+            for (Integer seatId : seatIds) {
+                stmt2.setInt(1, seatId);
                 stmt2.setInt(2, movieSessionId);
                 stmt2.addBatch();
             }
@@ -123,6 +123,7 @@ public class MySqlTicketDAO implements TicketDAO {
             }
         } catch (SQLException ex) {
             logger.error(ex);
+            return 0L;
         } finally {
             closeResourcesWithLogger(connection, stmt, resultSet, logger);
         }
@@ -150,16 +151,6 @@ public class MySqlTicketDAO implements TicketDAO {
         } finally {
             closeResourcesWithLogger(connection, stmt, resultSet, logger);
         }
-    }
-
-    private Ticket mapTicket(ResultSet resultSet) throws SQLException {
-        return Ticket.builder()
-                .id(resultSet.getInt("t.id"))
-                .movieSession(mapMovieSession(resultSet))
-                .seat(mapSeat(resultSet))
-                .user(User.builder()
-                        .id(resultSet.getInt("t.user_id")).build())
-                .build();
     }
 
 }

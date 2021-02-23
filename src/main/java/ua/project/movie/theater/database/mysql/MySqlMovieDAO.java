@@ -31,6 +31,21 @@ public class MySqlMovieDAO implements MovieDAO {
 
     @Override
     public Optional<Movie> findOne(Movie movie) {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        ResultSet resultSet = null;
+        try {
+            connection = connectionPool.getConnection();
+            stmt = connection.prepareStatement("SELECT m.* FROM movie m WHERE title_en = ?");
+            stmt.setString(1, movie.getTitleEn());
+            resultSet = stmt.executeQuery();
+            resultSet.next();
+            return Optional.of(mapMovie(resultSet));
+        } catch (SQLException e) {
+            logger.error(e);
+        } finally {
+            closeResourcesWithLogger(connection, stmt, resultSet, logger);
+        }
         return Optional.empty();
     }
 
@@ -80,6 +95,25 @@ public class MySqlMovieDAO implements MovieDAO {
             logger.error(e);
         } finally {
             closeResourcesWithLogger(connection, stmt, resultSet, logger);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Integer> delete(Movie testMovie1) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = connectionPool.getConnection();
+            statement = connection.prepareStatement("DELETE FROM movie WHERE title_en = ?");
+            statement.setString(1, testMovie1.getTitleEn());
+            int rowCount = statement.executeUpdate();
+            return Optional.of(rowCount);
+
+        } catch (SQLException e) {
+            logger.error(e);
+        } finally {
+            closeResourcesWithLogger(connection, statement, resultSet, logger);
         }
         return Optional.empty();
     }

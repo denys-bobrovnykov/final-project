@@ -33,9 +33,10 @@ public class AdminCommandSessionRemove implements Command {
         }
         try {
             movieSessionService.cancelSession(realId);
+            logger.info("Movie session removed");
         } catch (AppException e) {
             logger.error("Session not removed");
-            getFlashAttributesContainer(request).put("error", "Session not removed");
+            getFlashAttributesContainer(request).put("error", "error.not.removed");
             return request.getContextPath() + "redirect:/home";
         }
         getFlashAttributesContainer(request).put("success", "removed");

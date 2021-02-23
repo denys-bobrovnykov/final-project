@@ -34,7 +34,7 @@ public class SeatServiceTest {
 
         @Override
         public List<Seat> findAllBySessionId(Integer id) {
-            return null;
+            return Stream.of(TEST_SEAT_1, TEST_SEAT_2).collect(Collectors.toList());
         }
     }
 

@@ -6,6 +6,7 @@ import ua.project.movie.theater.commands.Command;
 import ua.project.movie.theater.database.DAOFactory;
 import ua.project.movie.theater.database.model.Movie;
 import ua.project.movie.theater.database.model.MovieSession;
+import ua.project.movie.theater.database.model.User;
 import ua.project.movie.theater.service.MovieSessionService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,6 +41,7 @@ public class AdminCommandSession implements Command {
                 List<String> errors = getValidationErrors(day, time, movieId);
                 getFlashAttributesContainer(request).put("errors", errors);
                 if (!errors.isEmpty()) {
+                    logger.warn("User {} entered invalid data: {}", ((User) request.getSession().getAttribute("user")).getEmail(),errors);
                     return request.getContextPath() + "redirect:/admin";
                 }
                 movieSessionService.save(MovieSession.builder()
@@ -49,6 +51,7 @@ public class AdminCommandSession implements Command {
                         .id(Integer.parseInt(movieId))
                         .build())
                 .build());
+                logger.info("New movie session created");
                 getFlashAttributesContainer(request).put("success", "movieSession");
                 return request.getContextPath() + "redirect:/admin";
             } catch (Exception e) {

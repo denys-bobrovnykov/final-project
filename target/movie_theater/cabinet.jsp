@@ -1,11 +1,9 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="my" uri="/WEB-INF/date.tld"%>
 <%@ page isELIgnored="false" %>
 
-<%--<c:set var="currentLocale" value="${not empty param.locale ? param.locale : not empty currentLocale ? currentLocale : sessionScope.currentLocale}" scope="session" />--%>
-<%--<fmt:setLocale value="${currentLocale}"/>&lt;%&ndash;&ndash;%&gt;--%>
-<%--<fmt:setBundle basename="messages"/>--%>
 
 <html lang="en">
 <head>
@@ -17,7 +15,6 @@
   <link href="${pageContext.request.contextPath}/static/css/main.css" rel="stylesheet" />
   <script src="https://kit.fontawesome.com/73e5d9eb4d.js" crossorigin="anonymous"></script>
   <title>Home</title>
-
 </head>
 
 <body>
@@ -40,6 +37,9 @@
               </p>
               <p>
                 <span><fmt:message key="day-${ticket.getMovieSession().getDayOfSession().getDayOfWeek().getValue()}"/></span>
+              </p>
+              <p>
+                <span><my:Date date="${ticket.getMovieSession().getDayOfSession()}"/></span>
               </p>
               <p>
                 <span><c:out value="${ticket.getMovieSession().getTimeStart()}"/></span>

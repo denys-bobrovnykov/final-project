@@ -41,7 +41,6 @@ public class MySqlUserDAO implements GenericCrudDAO<User>, UserDAO {
             resultSet = stmt.executeQuery();
             logger.info("User found");
             if (resultSet.next()) {
-                logger.info("In resultSet");
                 return Optional.of(mapUser(resultSet));
             }
         } catch (SQLException ex) {
@@ -94,4 +93,20 @@ public class MySqlUserDAO implements GenericCrudDAO<User>, UserDAO {
         return Optional.empty();
     }
 
+    public Optional<Integer> delete(User user) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = connectionPool.getConnection();
+            statement = connection.prepareStatement("DELETE FROM user WHERE email = ?");
+            statement.setString(1, user.getEmail());
+            int rowCount = statement.executeUpdate();
+            return Optional.of(rowCount);
+        } catch (SQLException e) {
+            logger.error(e);
+        } finally {
+            closeResourcesWithLogger(connection, statement, null, logger);
+        }
+        return Optional.empty();
+    }
 }

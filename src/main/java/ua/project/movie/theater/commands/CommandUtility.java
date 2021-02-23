@@ -10,15 +10,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
+/**
+ * Command utility class.
+ * Contains util methods used in commands.
+ */
 public class CommandUtility {
     private static final Logger logger = LogManager.getLogger(CommandUtility.class);
 
-    private CommandUtility(){}
+    private CommandUtility() {
+    }
+
     public static boolean isLoggedIn(HttpServletRequest request, User user) {
         HashSet<User> loggedUsers = (HashSet<User>) request.getSession().getServletContext()
                 .getAttribute("loggedUsers");
 
-        if(loggedUsers.stream().anyMatch(user::equals)){
+        if (loggedUsers.stream().anyMatch(user::equals)) {
             return true;
         }
         loggedUsers.add(user);
@@ -29,24 +35,30 @@ public class CommandUtility {
     }
 
     public static List<String> getParamList(String[] sortParam) {
-        return sortParam.length > 0 ? Arrays.asList(sortParam) : new ArrayList<>(0);
+        return sortParam.length > 0 ? Arrays.asList(sortParam) : new ArrayList<>();
     }
 
-    public static  String[] getParams(HttpServletRequest request, String param) {
+    public static String[] getParams(HttpServletRequest request, String param) {
         return request.getParameterMap().get(param) != null ? (String[]) request.getParameterMap().get(param) : new String[]{};
     }
 
-    public static  int getPageNumber(HttpServletRequest request) {
+    public static int getPageNumber(HttpServletRequest request) {
         return request.getParameter("page") == null
                 || Integer.parseInt(request.getParameter("page")) < 0
                 ? 0
                 : Integer.parseInt(request.getParameter("page"));
     }
 
-    public static  String getSortParamsForPage(String[] sortParam) {
+    /**
+     * Concatenates "&sort=" and additional "&sort=" params into http query for multi sort filter
+     * Input ["param1", "param2"]
+     * @param sortParam list of sort params
+     * @return "param1&sort=param2"
+     */
+    public static String getSortParamsForPage(String[] sortParam) {
         StringBuilder builder = new StringBuilder();
         Arrays.stream(sortParam).forEach(param -> builder.append("&sort=").append(param));
-        return builder.toString().length() > 0 ?  builder.substring("&sort=".length()) : builder.toString();
+        return builder.toString().length() > 0 ? builder.substring("&sort=".length()) : builder.toString();
     }
 
     public static Map<String, Object> getFlashAttributesContainer(HttpServletRequest request) {

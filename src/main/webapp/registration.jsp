@@ -3,11 +3,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page isELIgnored="false" %>
 
-<%--<c:set var="currentLocale" value="${not empty param.locale ? param.locale : not empty currentLocale ? currentLocale: 'ua'}" scope="session" />--%>
-<%--<fmt:setLocale value="${currentLocale}" />--%>
-<%--&lt;%&ndash;&ndash;%&gt;--%>
-<%--<fmt:setBundle basename="messages"/>--%>
-
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -39,10 +34,6 @@
                     </div>
                 </c:forEach>
             </c:if>
-<%--            <div th:if="${error}" class="alert alert-warning alert-dismissible fade show" role="alert" >--%>
-<%--                <p th:text="#{${error.getMessage()}}"></p>--%>
-<%--                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>--%>
-<%--            </div>--%>
             <div class="mb-3">
                 <label for="ControlInput1" class="form-label"><fmt:message key="field.email"/></label>
                 <input type="text"

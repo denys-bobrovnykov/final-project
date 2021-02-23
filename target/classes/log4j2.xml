@@ -3,7 +3,7 @@
     <Appenders>
         <Console name="STDOUT" target="SYSTEM_OUT">
             <PatternLayout>
-                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+                <Pattern>%highlight{%d %p %c{1.} [%t] %m%n}{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=blue, DEBUG=green bold}</Pattern>
             </PatternLayout>
         </Console>
         <RollingFile

@@ -43,6 +43,7 @@ public class AdminCommandMovie implements Command {
             .runningTime(Integer.parseInt(runningTime))
             .releaseYear(Integer.parseInt(releaseYear))
             .poster(poster).build());
+            logger.info("Movie created");
         } catch (AppException ex) {
             logger.error(ex);
             getFlashAttributesContainer(request).put("failed", "movie");

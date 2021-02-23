@@ -1,9 +1,12 @@
 package ua.project.movie.theater.database.model;
 
+import java.io.Serializable;
+
 /**
  * User model
  */
-public class User {
+public class User implements Serializable {
+    private static final Long serialVersionUID = 1L;
     private Integer id;
     private String email;
     private String password;
@@ -57,7 +60,6 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
                 ", role='" + role + '\'' +
                 '}';
     }

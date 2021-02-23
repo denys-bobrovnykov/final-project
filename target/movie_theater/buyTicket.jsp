@@ -17,7 +17,6 @@
   <link href="${pageContext.request.contextPath}/static/css/main.css" rel="stylesheet" />
   <script src="https://kit.fontawesome.com/73e5d9eb4d.js" crossorigin="anonymous"></script>
   <title>Buy</title>
-
 </head>
 
 <body>
@@ -35,7 +34,13 @@
                 <tr>
                   <td><c:out value="${row.getKey()}"/></td>
                     <c:forEach var="seat" items="${row.getValue()}">
-                      <td>
+                      <td
+                        <c:forEach var="ticket" items="${requestScope.get('tickets')}">
+                          <c:if test="${ticket.getSeat().equals(seat)}">
+                            style="background: green;"
+                          </c:if>
+                        </c:forEach>
+                      >
                         <input
                                <c:out value="${requestScope.get('seatSession').contains(seat) ? 'disabled' : ''}"/>
                                <c:out value="${requestScope.get('seatSession').contains(seat) ? 'checked' : ''}"/>
@@ -65,7 +70,7 @@
               <c:forEach var="ticket" items="${requestScope.get('tickets')}" varStatus="i">
                 <div class="alert alert-dark" role="alert">
                   <p>
-                      <span><fmt:message key="ticket"/><span><c:out value=" #  ${i.count}"/></span>
+                      <span><fmt:message key="ticket"/><span><c:out value=" #  ${ticket.getId()}"/></span>
                   </p>
                   <p>
                       <span><fmt:message key="seat.row"/></span><span><c:out value=" - ${ticket.getSeat().getRow()}"/>

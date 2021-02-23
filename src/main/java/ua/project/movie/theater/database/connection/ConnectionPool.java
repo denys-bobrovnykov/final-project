@@ -1,5 +1,6 @@
 package ua.project.movie.theater.database.connection;
 
+import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.project.movie.theater.database.properties.MySqlProperties;
@@ -18,21 +19,24 @@ import java.sql.SQLException;
  */
 public class ConnectionPool {
     private static final Logger logger = LogManager.getLogger(ConnectionPool.class);
-    private static DataSource ds;
+    private static BasicDataSource ds;
 
     private ConnectionPool() {
         logger.info("Creating connection pool");
     }
 
-    public static synchronized DataSource getConnectionPool() {
+    public static synchronized BasicDataSource getConnectionPool() {
         if (ds == null) {
-            Context ctx;
+            ds = new BasicDataSource();
             try {
-                ctx = new InitialContext();
-                ds = (DataSource) ctx.lookup(MySqlProperties.getValue("pool.resource.name"));
-            } catch (NamingException e) {
-                logger.error(e);
+                Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+            } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+                e.printStackTrace();
             }
+            ds.setUrl(MySqlProperties.getValue("prod.db.url"));
+            ds.setMinIdle(5);
+            ds.setMaxIdle(10);
+            ds.setMaxOpenPreparedStatements(100);
         }
         return ds;
     }

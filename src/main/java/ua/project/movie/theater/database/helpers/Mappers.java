@@ -1,9 +1,6 @@
 package ua.project.movie.theater.database.helpers;
 
-import ua.project.movie.theater.database.model.Movie;
-import ua.project.movie.theater.database.model.MovieSession;
-import ua.project.movie.theater.database.model.Seat;
-import ua.project.movie.theater.database.model.User;
+import ua.project.movie.theater.database.model.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -51,6 +48,16 @@ public class Mappers {
                 .releaseYear(resultSet.getInt("m.release_year"))
                 .runningTime(resultSet.getInt("m.running_time"))
                 .poster(resultSet.getString("m.poster"))
+                .build();
+    }
+
+    public static Ticket mapTicket(ResultSet resultSet) throws SQLException {
+        return Ticket.builder()
+                .id(resultSet.getInt("t.id"))
+                .movieSession(mapMovieSession(resultSet))
+                .seat(mapSeat(resultSet))
+                .user(User.builder()
+                        .id(resultSet.getInt("t.user_id")).build())
                 .build();
     }
 

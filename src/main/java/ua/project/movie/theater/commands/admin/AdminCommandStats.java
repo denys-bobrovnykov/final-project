@@ -33,7 +33,6 @@ public class AdminCommandStats implements Command {
         String dateStart = request.getParameter("date_start");
         String dateEnd = request.getParameter("date_end");
         List<String> errors = validatePeriod(dateStart, dateEnd);
-        logger.info("{} {} {}", dateStart, dateEnd, errors);
         if (!errors.isEmpty()) {
             getFlashAttributesContainer(request).put("errors", errors);
             return request.getContextPath() + "redirect:/admin";
@@ -44,7 +43,7 @@ public class AdminCommandStats implements Command {
             getFlashAttributesContainer(request).put("period", datesTuple);
             return request.getContextPath() + "redirect:/admin";
         } catch (AppException ex) {
-            logger.error(ex);
+            logger.error(ex, ex.getCause());
             return request.getContextPath() + "redirect:/admin";
         }
     }
@@ -55,10 +54,11 @@ public class AdminCommandStats implements Command {
             LocalDate start = LocalDate.parse(dateStart);
             LocalDate end = LocalDate.parse(dateEnd);
             if (end.isBefore(start)) {
+                logger.warn("{} is before {}", dateEnd, dateEnd);
                 validationErrors.add("error.start.before.end");
             }
         } catch (DateTimeParseException ex) {
-            logger.error("Dates not valid");
+            logger.warn("Dates not valid");
             validationErrors.add("error.invalid.search.dates");
         }
         return validationErrors;

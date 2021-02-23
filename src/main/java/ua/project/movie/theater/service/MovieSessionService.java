@@ -1,5 +1,7 @@
 package ua.project.movie.theater.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.project.movie.theater.database.MovieSessionDAO;
 import ua.project.movie.theater.database.helpers.MySortOrder;
 import ua.project.movie.theater.database.helpers.Page;
@@ -8,14 +10,14 @@ import ua.project.movie.theater.exception.AppException;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
  * MovieSession service.
  */
 public class MovieSessionService {
-    private MovieSessionDAO movieSessionDAO;
+    private final Logger logger = LogManager.getLogger(MovieSessionService.class);
+    private final MovieSessionDAO movieSessionDAO;
 
     public MovieSessionService(MovieSessionDAO movieSessionDAO) {
         this.movieSessionDAO = movieSessionDAO;
@@ -57,12 +59,13 @@ public class MovieSessionService {
      * @see MySortOrder
      */
     private List<MySortOrder> getSortOrders(List<String> sortParam, MySortOrder.Direction direction) {
-        return sortParam.size() > 0 && !"".equals(sortParam.get(0))
+        return !sortParam.isEmpty() && !"".equals(sortParam.get(0))
                 ? sortParam.stream().map(el -> new MySortOrder(el, direction)).collect(Collectors.toList())
                 : Arrays.asList(new MySortOrder("ms.day_of_session"), new MySortOrder("ms.time_start"));
     }
 
     public MovieSession save(MovieSession movieSession) throws AppException {
+        logger.info("Trying to save new movie session: {}", movieSession);
         return movieSessionDAO.save(movieSession).orElseThrow(() -> new AppException("Could not create movie"));
     }
 
@@ -71,8 +74,9 @@ public class MovieSessionService {
                 .orElseThrow(() -> new AppException("Could not find movie session"));
     }
 
-    public Integer cancelSession(Integer realId) throws AppException {
-        return movieSessionDAO.delete(MovieSession.builder().id(realId).build())
+    public Integer cancelSession(Integer id) throws AppException {
+        logger.info("Deleting movie session with id: {}", id);
+        return movieSessionDAO.delete(MovieSession.builder().id(id).build())
                 .orElseThrow(() -> new AppException("Could not delete movie session"));
     }
 }

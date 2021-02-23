@@ -22,6 +22,7 @@ public class CabinetCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
+        logger.info("User {} entered cabinet", ((User)request.getSession().getAttribute("user")).getEmail());
         try {
             request.setAttribute("tickets", ticketService.getTicketsForCurrentUser((User) request.getSession().getAttribute("user")));
         } catch (AppException ex) {

@@ -13,6 +13,7 @@ import ua.project.movie.theater.service.TicketService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,17 +28,19 @@ public class BuyTicketCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        Integer id = request.getParameter("id") != null ? Integer.parseInt(request.getParameter("id")) : null;
+        logger.info("User {} entered hall info", ((User)request.getSession().getAttribute("user")).getEmail());
+        Integer movieSessionId = request.getParameter("id") != null ? Integer.parseInt(request.getParameter("id")) : null;
         if ("POST".equals(request.getMethod())) {
             String[] seatId = getParams(request, "seat_id");
+            List<Integer> mappedSeatId = Arrays.stream(seatId).map(Integer::parseInt).collect(Collectors.toList());
             if (seatId.length == 0) {
                 logger.warn("No seat selected on post");
                 getFlashAttributesContainer(request).put("error", "error.choose.seat");
                 return request.getContextPath() + "redirect:/buy" + request
-                        .getQueryString().substring("?locale=mm".length()) + "id=" + id;
+                        .getQueryString().substring("?locale=mm".length()) + "id=" + movieSessionId;
             }
             try {
-                ticketService.buySeat(id, seatId,
+                ticketService.buySeat(movieSessionId, mappedSeatId,
                         (User) request.getSession().getAttribute("user"));
             } catch (AppException ex) {
                 logger.error("Buy ticket(s) transaction failed", ex);
@@ -50,13 +53,13 @@ public class BuyTicketCommand implements Command {
 
         try {
             request.setAttribute("tickets", ticketService.getUserTicketsForSession(
-                    (User) request.getSession().getAttribute("user"), id)
+                    (User) request.getSession().getAttribute("user"), movieSessionId)
             );
             List<Seat> seatsFromDB = seatService.getAllSeatsFromDB();
             request.setAttribute("flash", copyFlash(request));
-            request.setAttribute("selectedSession", movieSessionService.getSessionFromDbById(id));
+            request.setAttribute("selectedSession", movieSessionService.getSessionFromDbById(movieSessionId));
             request.setAttribute("seatsTotal", seatsFromDB.size());
-            request.setAttribute("seatSession", seatService.getSeatsForSession(id));
+            request.setAttribute("seatSession", seatService.getSeatsForSession(movieSessionId));
             request.setAttribute("rows", seatsFromDB.stream().collect(Collectors.groupingBy(Seat::getRow)));
         } catch (AppException ex) {
             logger.error("Did not get session and seats", ex);

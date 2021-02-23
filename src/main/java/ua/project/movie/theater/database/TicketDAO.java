@@ -19,7 +19,7 @@ public interface TicketDAO {
      * @param userId user id
      * @return
      */
-    Optional<Integer> buyTickets(Integer movieSessionId, String[] seatIds, int userId);
+    Optional<Integer> buyTickets(Integer movieSessionId, List<Integer> seatIds, int userId);
 
     /**
      * Gets tickets for matching movie and user

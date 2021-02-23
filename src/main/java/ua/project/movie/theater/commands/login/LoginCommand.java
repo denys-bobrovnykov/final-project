@@ -35,6 +35,7 @@ public class LoginCommand implements Command {
                         request.setAttribute("error", "error.already.logged.in");
                         return "/login.jsp";
                     }
+                    logger.info("User {} has logged in", user.getEmail());
                     getFlashAttributesContainer(request).put("success", "login");
                     return request.getContextPath() + "redirect:/home";
                 }

@@ -24,7 +24,6 @@ public class RegistrationCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        logger.info(PASSWORD_REGEX);
         if ("POST".equalsIgnoreCase(request.getMethod())) {
             List<String> errors = new ArrayList<>();
             String email = request.getParameter("email");
@@ -37,19 +36,20 @@ public class RegistrationCommand implements Command {
                 errors.add("error.register.email");
             }
             if (email.matches(EMAIL_REGEX) && pass.matches(PASSWORD_REGEX)) {
+                logger.info("Encoding password");
                 pass = passwordEncoder.encode(pass);
                 try {
-                    logger.info("In try");
                     loginService.saveNewUser(User.builder().email(email).password(pass).role(User.Role.USER).build());
                     getFlashAttributesContainer(request).put("success", "registration");
                     return request.getContextPath() + "redirect:/home";
                 } catch (Exception ex) {
-                    logger.info(ex);
+                    logger.info(ex.getMessage(), ex.getCause());
                     errors.add("creation error");
                     request.setAttribute("errors", errors);
                     return "/registration.jsp";
                 }
             }
+            logger.warn("Wrong registration data: {}", errors);
             request.setAttribute("errors", errors);
             return "/registration.jsp";
         }

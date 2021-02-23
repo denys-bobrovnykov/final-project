@@ -136,8 +136,6 @@ public class MovieSession {
         return "MovieSession{" +
                 "dayOfSession=" + dayOfSession +
                 ", timeStart=" + timeStart +
-                ", movie=" + movie +
-                ", seats=" + seatsAvailable +
                 '}';
     }
 }

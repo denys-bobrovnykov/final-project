@@ -73,9 +73,7 @@ public class AppServlet extends HttpServlet {
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        logger.info("Start");
         String path = request.getRequestURI();
-        logger.info(path);
         path = path.replaceAll(".*/app/" , "");
         Command command = commands.getOrDefault(path, (req, resp) -> req.getContextPath() + "redirect:/");
         String page = command.execute(request, response);

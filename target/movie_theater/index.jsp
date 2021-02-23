@@ -7,7 +7,6 @@
 <head>
     <%@ include file="./fragments/head.jsp"%>
     <title>Home</title>
-
 </head>
 
 <body>

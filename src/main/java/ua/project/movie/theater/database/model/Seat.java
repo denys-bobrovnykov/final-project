@@ -89,4 +89,12 @@ public class Seat {
             return new Seat(this);
         }
     }
+
+    @Override
+    public String toString() {
+        return "Seat{" +
+                "row=" + row +
+                ", number=" + number +
+                '}';
+    }
 }

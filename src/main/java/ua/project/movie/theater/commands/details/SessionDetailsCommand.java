@@ -16,6 +16,7 @@ public class SessionDetailsCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
+        logger.info("User entered details page");
         Integer id = request.getParameter("id") != null ? Integer.valueOf(request.getParameter("id")) : 0;
         try {
             request.setAttribute("selectedSession", movieSessionService.getSessionFromDbById(id));

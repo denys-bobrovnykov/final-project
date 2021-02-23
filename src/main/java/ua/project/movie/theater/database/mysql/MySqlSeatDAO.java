@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static ua.project.movie.theater.database.connection.ConnectionPool.closeResourcesWithLogger;
+import static ua.project.movie.theater.database.helpers.Mappers.mapMovie;
 import static ua.project.movie.theater.database.helpers.Mappers.mapSeat;
 
 /**
@@ -31,6 +32,22 @@ public class MySqlSeatDAO implements SeatDAO {
 
     @Override
     public Optional<Seat> findOne(Seat seat) {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        ResultSet resultSet = null;
+        try {
+            connection = connectionPool.getConnection();
+            stmt = connection.prepareStatement("SELECT s.* FROM seat s WHERE s.seat_row = ? AND s.seat_number = ?");
+            stmt.setInt(1, seat.getRow());
+            stmt.setInt(2, seat.getNumber());
+            resultSet = stmt.executeQuery();
+            resultSet.next();
+            return Optional.of(mapSeat(resultSet));
+        } catch (SQLException e) {
+            logger.error(e);
+        } finally {
+            closeResourcesWithLogger(connection, stmt, resultSet, logger);
+        }
         return Optional.empty();
     }
 
@@ -57,7 +74,27 @@ public class MySqlSeatDAO implements SeatDAO {
 
     @Override
     public Optional<Seat> save(Seat seat) {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        ResultSet resultSet = null;
+        try {
+            connection = connectionPool.getConnection();
+            stmt = connection.prepareStatement("INSERT INTO seat (seat_row, seat_number) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+            stmt.setInt(1, seat.getRow());
+            stmt.setInt(2, seat.getNumber());
+            stmt.executeUpdate();
+            resultSet = stmt.getGeneratedKeys();
+            if (resultSet.next()) {
+                seat.setId(resultSet.getInt(1));
+                return Optional.of(seat);
+            }
+        } catch (SQLException e) {
+            logger.error(e);
+        } finally {
+            closeResourcesWithLogger(connection, stmt, resultSet, logger);
+        }
         return Optional.empty();
+
     }
 
     @Override
@@ -80,5 +117,24 @@ public class MySqlSeatDAO implements SeatDAO {
             closeResourcesWithLogger(connection, stmt, resultSet, logger);
         }
         return seats;
+    }
+
+    public Optional<Integer> delete(Seat seat1) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = connectionPool.getConnection();
+            statement = connection.prepareStatement("DELETE FROM seat WHERE seat_row = ? AND seat_number = ?");
+            statement.setInt(1, seat1.getRow());
+            statement.setInt(2, seat1.getNumber());
+            int rowCount = statement.executeUpdate();
+            return Optional.of(rowCount);
+
+        } catch (SQLException e) {
+            logger.error(e);
+        } finally {
+            closeResourcesWithLogger(connection, statement, null, logger);
+        }
+        return Optional.empty();
     }
 }
