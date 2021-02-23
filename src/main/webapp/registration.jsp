@@ -19,8 +19,6 @@
 
 <%@ include file="./fragments/header.jsp" %>
 
-<c:out value="${sessionScope.get('currentLocale')}"/>
-
 <main class="d-flex justify-content-center container sm-5 my-5">
     <div class="col-6 justify-items-center">
         <h2 class="container"><fmt:message key="title.registration"/></h2>
@@ -51,6 +49,8 @@
 
     </div>
 </main>
+<%@ include file="./fragments/footer.jsp" %>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 </body>
 </html>

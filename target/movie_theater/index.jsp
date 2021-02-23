@@ -97,7 +97,7 @@
                     <ul class="pagination justify-content-center">
                         <li class="page-item">
                             <a class="page-link"
-                               href="?page=${requestScope.get('current_page') > 0 ? requestScope.get('current_page') - 1 : 0}&sort=${requestScope.get('sortParam')}&sort_dir=${requestScope.get('sortDir')}&search=${requestScope.get('search')}&locale=${currentLocale}"
+                               href="?page=${requestScope.get('current_page') > 0 ? requestScope.get('current_page') - 1 : 0}&sort=${requestScope.get('sortParam')}&sort_dir=${requestScope.get('sortDir')}&search=${requestScope.get('search')}&value=${requestScope.get('value')}&locale=${currentLocale}"
                                aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
@@ -105,14 +105,14 @@
                         <c:forEach var="page" begin="1" end="${requestScope.get('pages')}">
                             <li class="${requestScope.get('current_page') == page - 1 ? 'page-item active' : 'page-item'}">
                                 <a class="page-link"
-                                   href="?page=${page - 1}&sort=${requestScope.get('sortParam')}&sort_dir=${requestScope.get('sortDir')}&search=${requestScope.get('search')}&locale=${currentLocale}"
+                                   href="?page=${page - 1}&sort=${requestScope.get('sortParam')}&sort_dir=${requestScope.get('sortDir')}&search=${requestScope.get('search')}&locale=${currentLocale}&value=${requestScope.get('value')}"
                                 ><c:out value="${page}"/>
                                 </a>
                             </li>
                         </c:forEach>
                         <li class="page-item">
                             <a class="page-link"
-                               href="?page=${requestScope.get('current_page') < requestScope.get('pages') - 1 ? requestScope.get('current_page') + 1 : requestScope.get('pages') - 1}&sort=${requestScope.get('sortParam')}&sort_dir=${requestScope.get('sortDir')}&search=${requestScope.get('search')}&locale=${currentLocale}"
+                               href="?page=${requestScope.get('current_page') < requestScope.get('pages') - 1 ? requestScope.get('current_page') + 1 : requestScope.get('pages') - 1}&sort=${requestScope.get('sortParam')}&sort_dir=${requestScope.get('sortDir')}&value=${requestScope.get('value')}&search=${requestScope.get('search')}&locale=${currentLocale}"
                                aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
@@ -122,8 +122,8 @@
             </c:if>
         </div>
     </section>
-
 </main>
+<%@ include file="./fragments/footer.jsp" %>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
