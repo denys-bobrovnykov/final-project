@@ -22,6 +22,7 @@ import static ua.project.movie.theater.database.helpers.Mappers.mapUser;
 public class MySqlUserDAO implements GenericCrudDAO<User>, UserDAO {
     private static final String FIND_USER_BY_EMAIL = MySqlProperties.getValue("find.user.by.email");
     private static final String SAVE_USER = MySqlProperties.getValue("save.user");
+    private static final String DELETE_USER = MySqlProperties.getValue("delete.user");
     private final Logger logger = LogManager.getLogger(MySqlUserDAO.class);
     private final DataSource connectionPool;
 
@@ -98,7 +99,7 @@ public class MySqlUserDAO implements GenericCrudDAO<User>, UserDAO {
         PreparedStatement statement = null;
         try {
             connection = connectionPool.getConnection();
-            statement = connection.prepareStatement("DELETE FROM user WHERE email = ?");
+            statement = connection.prepareStatement(DELETE_USER);
             statement.setString(1, user.getEmail());
             int rowCount = statement.executeUpdate();
             return Optional.of(rowCount);

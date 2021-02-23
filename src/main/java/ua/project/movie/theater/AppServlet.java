@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import ua.project.movie.theater.commands.*;
 import ua.project.movie.theater.commands.admin.*;
 import ua.project.movie.theater.commands.buy.BuyTicketCommand;
+import ua.project.movie.theater.commands.buy.BuyTicketPurchaseCommand;
 import ua.project.movie.theater.commands.cabinet.CabinetCommand;
 import ua.project.movie.theater.commands.details.SessionDetailsCommand;
 import ua.project.movie.theater.commands.index.IndexCommand;
@@ -50,6 +51,7 @@ public class AppServlet extends HttpServlet {
         commands.put("cabinet", new CabinetCommand());
         commands.put("details", new SessionDetailsCommand());
         commands.put("buy", new BuyTicketCommand());
+        commands.put("buy/purchase", new BuyTicketPurchaseCommand());
     }
 
     @Override

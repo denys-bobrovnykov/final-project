@@ -45,13 +45,8 @@
               <span><c:out value="${selectedSession.getMovie().getRunningTime()}"/></span> <span><fmt:message key="minutes"/></span>
             </p>
             <div class="container d-flex justify-content-center">
-              <c:if test="${sessionScope.get('user') != null}">
                 <p>
-                  <a class="btn btn-success" href="${ctxPath}/app/buy?locale=${currentLocale}&id=${selectedSession.getId()}"><fmy:message key="buy.ticket"/></a></p>
-              </c:if>
-              <c:if test="${sessionScope.get('user') == null}">
-                <a href="${ctxPath}/app/login" class="btn btn-warning"><fmt:message key="please.sign.in"/></a>
-              </c:if>
+                  <a class="btn btn-success" href="${ctxPath}/app/buy?locale=${currentLocale}&id=${selectedSession.getId()}"><fmy:message key="preview.seats"/></a></p>
             </div>
           </div>
         </div>

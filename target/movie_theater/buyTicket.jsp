@@ -28,7 +28,7 @@
         <p class="h-10 mb-0"><fmt:message key="screen"/></p>
       </div>
       <div class="d-flex justify-content-center">
-        <form  class="d-flex flex-column justify-content-center" action="${ctxPath}/app/buy?id=${requestScope.get('selectedSession').getId()}" method="post">
+        <form  class="d-flex flex-column justify-content-center" action="${ctxPath}/app/buy/purchase?id=${requestScope.get('selectedSession').getId()}" method="post">
           <table class="table align-middle">
               <c:forEach var="row" items="${requestScope.get('rows').entrySet()}">
                 <tr>
@@ -52,9 +52,13 @@
                 </tr>
               </c:forEach>
           </table>
-          <c:if test="${requestScope.get('seatSession').size() < requestScope.get('seatsTotal')}">
+          <c:if test="${requestScope.get('seatSession').size() < requestScope.get('seatsTotal') and sessionScope.get('user') != null}">
             <input class="btn btn-success my-2" type="submit" value="<fmt:message key="buy.ticket"/>"/>
           </c:if>
+          <c:if test="${sessionScope.get('user') == null}">
+            <a href="${ctxPath}/app/login" class="btn btn-warning"><fmt:message key="please.sign.in"/></a>
+          </c:if>
+
         </form>
       </div>
       <c:if test="${requestScope.get('flash').get('error') != null}">

@@ -13,7 +13,6 @@ import ua.project.movie.theater.service.TicketService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,33 +27,13 @@ public class BuyTicketCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        logger.info("User {} entered hall info", ((User)request.getSession().getAttribute("user")).getEmail());
         Integer movieSessionId = request.getParameter("id") != null ? Integer.parseInt(request.getParameter("id")) : null;
-        if ("POST".equals(request.getMethod())) {
-            String[] seatId = getParams(request, "seat_id");
-            List<Integer> mappedSeatId = Arrays.stream(seatId).map(Integer::parseInt).collect(Collectors.toList());
-            if (seatId.length == 0) {
-                logger.warn("No seat selected on post");
-                getFlashAttributesContainer(request).put("error", "error.choose.seat");
-                return request.getContextPath() + "redirect:/buy" + request
-                        .getQueryString().substring("?locale=mm".length()) + "id=" + movieSessionId;
-            }
-            try {
-                ticketService.buySeat(movieSessionId, mappedSeatId,
-                        (User) request.getSession().getAttribute("user"));
-            } catch (AppException ex) {
-                logger.error("Buy ticket(s) transaction failed", ex);
-                return request.getContextPath() + "redirect:/buy?locale=" + request.getSession().getAttribute("currentLocale") + "&" + request
-                        .getQueryString();
-            }
-            return request.getContextPath() + "redirect:/buy?locale=" + request.getSession().getAttribute("currentLocale") + "&" + request
-                    .getQueryString();
-        }
-
         try {
-            request.setAttribute("tickets", ticketService.getUserTicketsForSession(
-                    (User) request.getSession().getAttribute("user"), movieSessionId)
-            );
+            if (request.getSession().getAttribute("user") != null) {
+                request.setAttribute("tickets", ticketService.getUserTicketsForSession(
+                        (User) request.getSession().getAttribute("user"), movieSessionId)
+                );
+            }
             List<Seat> seatsFromDB = seatService.getAllSeatsFromDB();
             request.setAttribute("flash", copyFlash(request));
             request.setAttribute("selectedSession", movieSessionService.getSessionFromDbById(movieSessionId));

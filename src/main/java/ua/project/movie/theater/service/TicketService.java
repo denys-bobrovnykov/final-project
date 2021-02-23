@@ -27,7 +27,7 @@ public class TicketService {
     }
 
     public List<Ticket> getUserTicketsForSession(User user, Integer movieSessionId) throws AppException {
-        logger.info("Getting all user {} tickets for selected movie session", user.getEmail());
+//        logger.info("Getting all user {} tickets for selected movie session", user.getEmail());
         return ticketDAO.getTicketsForUserMovie(user, movieSessionId).orElseThrow(() -> new AppException("Tickets not found"));
     }
 

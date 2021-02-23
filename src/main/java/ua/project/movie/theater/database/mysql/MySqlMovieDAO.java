@@ -21,6 +21,8 @@ import static ua.project.movie.theater.database.helpers.Mappers.mapMovie;
 public class MySqlMovieDAO implements MovieDAO {
     private static final String FIND_ALL = MySqlProperties.getValue("find.all.movies");
     private static final String CREATE_MOVIE = MySqlProperties.getValue("create.movie");
+    private static final String FIND_ONE_MOVIE = MySqlProperties.getValue("find.one.movie");
+    private static final String DELETE_MOVIE = MySqlProperties.getValue("delete.movie");
     private final Logger logger = LogManager.getLogger(MySqlMovieDAO.class);
     private final DataSource connectionPool;
 
@@ -36,7 +38,7 @@ public class MySqlMovieDAO implements MovieDAO {
         ResultSet resultSet = null;
         try {
             connection = connectionPool.getConnection();
-            stmt = connection.prepareStatement("SELECT m.* FROM movie m WHERE title_en = ?");
+            stmt = connection.prepareStatement(FIND_ONE_MOVIE);
             stmt.setString(1, movie.getTitleEn());
             resultSet = stmt.executeQuery();
             resultSet.next();
@@ -102,10 +104,9 @@ public class MySqlMovieDAO implements MovieDAO {
     public Optional<Integer> delete(Movie testMovie1) {
         Connection connection = null;
         PreparedStatement statement = null;
-        ResultSet resultSet = null;
         try {
             connection = connectionPool.getConnection();
-            statement = connection.prepareStatement("DELETE FROM movie WHERE title_en = ?");
+            statement = connection.prepareStatement(DELETE_MOVIE);
             statement.setString(1, testMovie1.getTitleEn());
             int rowCount = statement.executeUpdate();
             return Optional.of(rowCount);
@@ -113,7 +114,7 @@ public class MySqlMovieDAO implements MovieDAO {
         } catch (SQLException e) {
             logger.error(e);
         } finally {
-            closeResourcesWithLogger(connection, statement, resultSet, logger);
+            closeResourcesWithLogger(connection, statement, null, logger);
         }
         return Optional.empty();
     }

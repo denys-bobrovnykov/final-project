@@ -42,7 +42,7 @@
 
   <filter-mapping>
     <filter-name>BuyTickets</filter-name>
-    <url-pattern>/app/buy/*</url-pattern>
+    <url-pattern>/app/buy/purchase/*</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
