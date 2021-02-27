@@ -16,3 +16,5 @@
 ##### Файл для створення основної бази даних [prod_db.sql](./prod_db.sql)
 ##### Файл для створення тестової бази даних [test_db.sql](./test_db.sql)
 
+## Схема бази даних
+![db schema](./database_schema.png)
